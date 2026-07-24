@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grand Sapphire Resorts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Motion Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+<script src="https://unpkg.com/split-type"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "deep-forest": "#122E22",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#727974",
+                        "secondary-fixed": "#ffe08e",
+                        "on-primary-container": "#799787",
+                        "antique-gold": "#C9A227",
+                        "on-secondary-container": "#735a00",
+                        "twilight-navy": "#0D1B2E",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f4f1e8",
+                        "inverse-surface": "#31312b",
+                        "surface-bright": "#fcf9f0",
+                        "warm-ivory": "#F8F5EC",
+                        "tertiary": "#211100",
+                        "background": "#fcf9f0",
+                        "secondary": "#755b00",
+                        "primary-container": "#122e22",
+                        "tertiary-fixed": "#ffddb9",
+                        "tertiary-fixed-dim": "#ffb961",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#424844",
+                        "surface-variant": "#e5e2da",
+                        "tertiary-container": "#3d2300",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1c1c17",
+                        "amber-glow": "#F0A94E",
+                        "on-surface": "#1c1c17",
+                        "surface-tint": "#486456",
+                        "secondary-fixed-dim": "#ecc246",
+                        "surface-container-low": "#f6f3ea",
+                        "on-tertiary-container": "#c3822a",
+                        "primary": "#00190f",
+                        "on-secondary-fixed": "#241a00",
+                        "on-primary-fixed-variant": "#314c3f",
+                        "outline-variant": "#c2c8c2",
+                        "secondary-container": "#fed255",
+                        "surface-dim": "#dddad1",
+                        "on-secondary-fixed-variant": "#584400",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#caead7",
+                        "surface-container": "#f1eee5",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#aecebc",
+                        "on-tertiary-fixed": "#2b1700",
+                        "surface": "#fcf9f0",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "inverse-primary": "#aecebc",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#042015",
+                        "surface-container-high": "#ebe8df",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e5e2da"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "md": "24px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "max-width": "1280px",
+                        "lg": "64px",
+                        "xl": "120px"
+                    },
+                    fontFamily: {
+                        "headline-md": ["Cormorant Garamond", "serif"],
+                        "label-caps": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Cormorant Garamond", "serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "headline-lg": ["Cormorant Garamond", "serif"]
+                    },
+                    fontSize: {
+                        "headline-md": ["2.25rem", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-caps": ["0.75rem", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["2.5rem", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["1rem", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["3.5rem", { "lineHeight": "1.1", "fontWeight": "600" }]
+                    },
+                    boxShadow: {
+                        'warm': '0 10px 25px -5px rgba(201, 162, 39, 0.1), 0 8px 10px -6px rgba(201, 162, 39, 0.1)'
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        body {
+            background-color: #F8F5EC; /* warm-ivory fallback */
+            color: #122E22; /* deep-forest fallback */
+        }
+        .nav-scrolled {
+            background-color: #F8F5EC !important;
+            color: #122E22 !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .nav-scrolled .nav-link {
+            color: #122E22 !important;
+        }
+        .nav-scrolled .brand-logo {
+            color: #122E22 !important;
+        }
+        .nav-scrolled .material-symbols-outlined {
+            color: #122E22 !important;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Utility for GSAP text splitting */
+        .line { overflow: hidden; }
+        
+        /* Interactive Cards */
+        .interactive-card {
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease;
+        }
+        .interactive-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(201, 162, 39, 0.15), 0 8px 10px -6px rgba(201, 162, 39, 0.1);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .interactive-card:hover {
+                transform: none;
+            }
+            #hero-shader-canvas {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-warm-ivory font-body-md text-body-md text-deep-forest antialiased">
+<!-- TopNavBar (JSON Injected) -->
+<nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-md" id="mainNav">
+<div class="flex justify-between items-center px-lg py-md max-w-max-width mx-auto">
+<a class="font-headline-md text-headline-md text-warm-ivory brand-logo transition-colors" href="#">Grand Sapphire Resorts</a>
+<div class="hidden md:flex gap-md items-center">
+<a class="text-warm-ivory font-medium hover:text-antique-gold transition-colors duration-300 nav-link" href="#villas">Villas</a>
+<a class="text-warm-ivory font-medium hover:text-antique-gold transition-colors duration-300 nav-link" href="#facilities">Facilities</a>
+<a class="text-warm-ivory font-medium hover:text-antique-gold transition-colors duration-300 nav-link" href="#experiences">Experiences</a>
+<a class="text-warm-ivory font-medium hover:text-antique-gold transition-colors duration-300 nav-link" href="#location">Location</a>
+<div class="flex items-center gap-sm ml-md border-l border-warm-ivory/30 pl-md">
+<span class="text-warm-ivory font-medium text-sm nav-link">EN</span>
+<span class="text-warm-ivory/50 font-medium text-sm nav-link">ML</span>
+</div>
+<button class="bg-antique-gold text-deep-forest px-6 py-3 rounded scale-95 duration-200 transition-transform hover:bg-opacity-90 font-medium ml-md">Book Now</button>
+</div>
+<button class="md:hidden text-warm-ivory nav-link">
+<span class="material-symbols-outlined" style="font-size: 32px;">menu</span>
+</button>
+</div>
+</nav>
+<!-- 1. Full-bleed Hero -->
+<section class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+<canvas class="absolute inset-0 w-full h-full z-0 object-cover" id="hero-shader-canvas"></canvas>
+<div class="absolute inset-0 z-0">
+<img alt="Grand Sapphire Resort at twilight" class="w-full h-full object-cover hero-bg opacity-70 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhg66ONDmAgn_Edn-CJhUsTTHf5ys_5umEJTksrPgE6gDW5B98Ajea_iAQE9BcIG5qW4rI1LnJhCCqNUVKjCa9Sswy9dAgRDwsg47nZLOrbcK2EKDOnjgxGLeDgoQgQMbNC4WkCxk8cMqgmnMYZKqATFAFeGkB3mtDrTs18JVrMy5-oMm73j_NIEcY4kBrRs_Th683kT6FbLoY3AcczopBpXDw3qRL0oPMR84IETxzwMdQlpEsZ4C41pGilbPj7GbIzIjpacBwjc"/>
+<div class="absolute inset-0 bg-twilight-navy/30 hero-overlay"></div>
+</div>
+<div class="relative z-10 text-center px-4 flex flex-col items-center mt-xl">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-warm-ivory mb-6 max-w-4xl drop-shadow-lg hero-headline">
+                Unwind in Nature, Live in Luxury
+            </h1>
+<button class="bg-antique-gold text-deep-forest px-8 py-4 rounded-md font-medium text-lg hover:bg-secondary-fixed transition-colors mt-8 shadow-sm hero-cta">
+                Book Your Stay
+            </button>
+</div>
+</section>
+<!-- 2. Trust Strip -->
+<section class="bg-warm-ivory py-8 border-b border-surface-variant trust-strip-section">
+<div class="max-w-max-width mx-auto px-lg">
+<div class="flex flex-wrap justify-center gap-md items-center trust-strip-content">
+<div class="flex items-center gap-sm bg-surface py-2 px-4 rounded-full border border-antique-gold/20">
+<span class="material-symbols-outlined text-antique-gold" data-icon="support_agent">support_agent</span>
+<span class="font-label-caps text-label-caps text-deep-forest">24/7 ASSISTANCE</span>
+</div>
+<div class="flex items-center gap-sm bg-surface py-2 px-4 rounded-full border border-antique-gold/20">
+<span class="material-symbols-outlined text-antique-gold" data-icon="videocam">videocam</span>
+<span class="font-label-caps text-label-caps text-deep-forest">CCTV SECURITY</span>
+</div>
+<div class="flex items-center gap-sm bg-surface py-2 px-4 rounded-full border border-antique-gold/20">
+<span class="material-symbols-outlined text-antique-gold" data-icon="wifi">wifi</span>
+<span class="font-label-caps text-label-caps text-deep-forest">FREE WI-FI</span>
+</div>
+<div class="flex items-center gap-sm bg-surface py-2 px-4 rounded-full border border-antique-gold/20">
+<span class="material-symbols-outlined text-antique-gold" data-icon="family_restroom">family_restroom</span>
+<span class="font-label-caps text-label-caps text-deep-forest">FAMILY FRIENDLY</span>
+</div>
+<div class="flex items-center gap-sm ml-auto bg-deep-forest text-warm-ivory py-2 px-4 rounded-full">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+<a class="font-label-caps text-label-caps" href="tel:+911234567890">+91 123 456 7890</a>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Room Cards Row -->
+<section class="py-xl max-w-max-width mx-auto px-lg accommodations-section" id="villas">
+<div class="mb-12 text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-deep-forest mb-4">Accommodations</h2>
+<p class="text-on-surface-variant max-w-2xl">Discover our thoughtfully designed spaces, blending rustic charm with modern comfort.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md accommodations-grid">
+<!-- Room 1 -->
+<div class="bg-surface rounded-lg overflow-hidden border border-antique-gold/20 group hover:border-antique-gold/50 transition-colors accommodation-card interactive-card">
+<div class="relative h-64 overflow-hidden image-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 card-image" data-alt="A luxurious hotel room with a large window showing a misty mountain view at sunrise. The room features a plush king-sized bed with crisp white linens, a comfortable seating area, and elegant wooden accents. The color palette is warm and inviting, complementing the deep greens of the mountain landscape outside." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0yfFHIoBBYuXvWs2-7_5TynLyLHJGTa58Q-UnuK6-PcTFdVQDz5bkeH_Onqonkcr84qIlhJ5EwOXnWSx-RE6IFSSYlUWtcoPHSyYK71vta_vDfz4p2EHk34ZHRS94z6V-ur6429UhFiWygRrddVLt0RCAK1NO1C7AAPRZck9uWPH7qOcDs_9kxFEwT6qDzKF_eSJBHU8o__RWivML7jIDxFT9B3KworrCPqI0aszdfhHJcDY4ziWwtgyj_HryyebS0OFOSseSCbA"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-2xl text-deep-forest mb-2">Deluxe Mountain View</h3>
+<p class="text-on-surface-variant mb-6 min-h-[48px]">Spacious room offering panoramic views of the Western Ghats.</p>
+<div class="flex justify-between items-end border-t border-surface-variant pt-4">
+<div>
+<p class="text-sm text-on-surface-variant">Starting from</p>
+<p class="text-xl font-semibold text-deep-forest">₹6,500 <span class="text-sm font-normal">/night</span></p>
+</div>
+<button class="bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold">Reserve</button>
+</div>
+</div>
+</div>
+<!-- Room 2 -->
+<div class="bg-surface rounded-lg overflow-hidden border border-antique-gold/20 group hover:border-antique-gold/50 transition-colors accommodation-card interactive-card">
+<div class="relative h-64 overflow-hidden image-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 card-image" data-alt="A spacious and cozy family dormitory room in a mountain resort. The room has multiple comfortable beds arranged neatly, with warm lighting and wooden paneling on the walls. Large windows let in natural light, revealing a lush green forest outside. The atmosphere is communal and inviting, perfect for group stays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoFx9h_KabMVX-pHtoIYhP5JusxB7lMoUAw__uM1pK6x8r1d1G7tb-8mH6ZAKk6p2wuoz0bZFqpEbw-03nc6w0JsnJVT4vUiTnVvBqYVgr1PBZmUQeYSceFKlJGq2KSVZs7V3p2cbEehC31okAcUXhFcbyq6Rj4jQsN3VhVGgJ_Yuh4I30Bu-Arr60XWbu1_SUXIdpZrTJKbq5Gm2vgdDQQBNfvpVhB91Gx-4wR14x76BihW_bM1Nd6cLxHr59eyg6S8C4eNo9o2Q"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-2xl text-deep-forest mb-2">Family Dormitory</h3>
+<p class="text-on-surface-variant mb-6 min-h-[48px]">Perfect for large groups, featuring comfortable bunk beds and ample space.</p>
+<div class="flex justify-between items-end border-t border-surface-variant pt-4">
+<div>
+<p class="text-sm text-on-surface-variant">Starting from</p>
+<p class="text-xl font-semibold text-deep-forest">₹12,000 <span class="text-sm font-normal">/night</span></p>
+</div>
+<button class="bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold">Reserve</button>
+</div>
+</div>
+</div>
+<!-- Room 3 -->
+<div class="bg-surface rounded-lg overflow-hidden border border-antique-gold/20 group hover:border-antique-gold/50 transition-colors accommodation-card interactive-card">
+<div class="relative h-64 overflow-hidden image-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 card-image" data-alt="A stunning superior villa nestled in a lush hillside. The villa features a modern architectural design with large glass walls, surrounded by dense tropical foliage. A private infinity pool reflects the twilight sky. Warm lights illuminate the interior, contrasting beautifully with the cool, dark exterior environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNXEJ5MUkzmVnVSMYr9unyEJMvxr0N14fD4yMLMGE2ocMuaN80N5344A3sdrVH2mp9POJFUWIekin7D1gPgFTz1rU6TgUCeNBcxoEScj8_NcaJaTzVu0nMS3pxKIXw3UwdIa0gTP0uEzA2sNTyiX-7AXfpSyytezUvEU_uau7RtAB2OIVio4xP2fiYQPLvcIkAZAJHkp1JWKXGRs019qvfNkKtJ8GncASpbfSEemhF7ZZMOiou19RN9src4zHGfo6JE_GVr2LnR7s"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-2xl text-deep-forest mb-2">Superior Villa</h3>
+<p class="text-on-surface-variant mb-6 min-h-[48px]">An exclusive retreat with a private balcony and premium amenities.</p>
+<div class="flex justify-between items-end border-t border-surface-variant pt-4">
+<div>
+<p class="text-sm text-on-surface-variant">Starting from</p>
+<p class="text-xl font-semibold text-deep-forest">₹18,500 <span class="text-sm font-normal">/night</span></p>
+</div>
+<button class="bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold">Reserve</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Facilities Bento Grid -->
+<section class="bg-surface-container-low py-xl facilities-section" id="facilities">
+<div class="max-w-max-width mx-auto px-lg">
+<div class="mb-12">
+<h2 class="font-headline-md text-headline-md text-deep-forest mb-4">Resort Facilities</h2>
+<p class="text-on-surface-variant max-w-2xl">Everything you need for a comfortable and memorable stay.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md auto-rows-[200px] facilities-grid">
+<!-- Dining/Room -->
+<div class="col-span-2 row-span-2 relative rounded-lg overflow-hidden border border-antique-gold/30 group facility-large image-container">
+<img class="w-full h-full object-cover absolute inset-0 facility-large-img" data-alt="An elegant resort dining room with large windows overlooking a forest valley. The interior features warm wooden furniture, ambient lighting, and perfectly set tables. The atmosphere is sophisticated yet cozy, inviting guests to enjoy a meal while taking in the natural surroundings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_KI5hObTgOVkeOXpOPxpwLJeB1NcikafhcYsY-RcQwBZo6ai466dd-FVQYdp7zcjrJMS8MNMq8pOL4vTH4U6FQuHK6MGyLt5S8m3jtkgth5LvJrH1F4PDxTU6XlLH-XX8x7SKm4cG89Nto6fj-zkRXY6qcwgtjhCT3b_6ZUoY0wlM2b3y3464urMC2JTWizsf0ySTgbpmrs6wPUN44V7K8u8-7hSpD1WhBpNBZ2CJwu8RC7frImkXqa8RREiRdGNgO87mjlRAONM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-deep-forest/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<span class="material-symbols-outlined text-antique-gold mb-2 text-3xl" data-icon="restaurant">restaurant</span>
+<h3 class="font-headline-md text-2xl text-warm-ivory">Dining &amp; Room Service</h3>
+<p class="text-warm-ivory/80 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Savor local delicacies and international cuisine.</p>
+</div>
+</div>
+<!-- Pool -->
+<div class="col-span-2 row-span-1 relative rounded-lg overflow-hidden border border-antique-gold/30 group bg-surface facility-small image-container">
+<div class="absolute inset-0 flex items-center p-6 gap-6 z-10">
+<span class="material-symbols-outlined text-antique-gold text-4xl" data-icon="pool">pool</span>
+<div>
+<h3 class="font-headline-md text-xl text-deep-forest">Swimming Pool</h3>
+<p class="text-on-surface-variant text-sm mt-1">Infinity edge with valley views.</p>
+</div>
+</div>
+<div class="absolute right-0 top-0 w-1/2 h-full">
+<img class="w-full h-full object-cover opacity-60 card-image" data-alt="A pristine infinity swimming pool overlooking a misty mountain valley. The water reflects the twilight sky. Lounge chairs sit on a wooden deck adjacent to the pool, illuminated by soft, warm amber lighting. The scene evokes relaxation and luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUCkc-497h1NpGS_R7xe_-6VOaFs_3HERXYFBuEwbK-cj214YGGZKnkiLSwc321F01L1XtbfgTqOlpv80-3S5RGWroEYluK0qtBe9D5gMeFwV1fsiXJ5BmJr7M5v3elk1eGueF9qtwpvOdpwuaVAdlGw1pkGakrS6mrxZmoREOXfbPcuJPCnKpK_rJOi3-L4F_vukdbpYO92_P9ZuHZYnXRwa37S-f0VOBJ6elrfL5ktRPl-FyQCSEqTN_DvgAsTq8y1KEdX_unQ8"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface to-transparent"></div>
+</div>
+</div>
+<!-- Camp Fire -->
+<div class="col-span-1 row-span-1 relative rounded-lg overflow-hidden border border-antique-gold/30 group bg-deep-forest facility-small image-container">
+<div class="absolute inset-0 flex flex-col justify-center items-center p-4 text-center z-10">
+<span class="material-symbols-outlined text-amber-glow text-4xl mb-2" data-icon="local_fire_department">local_fire_department</span>
+<h3 class="font-headline-md text-lg text-warm-ivory">Camp Fire</h3>
+</div>
+<img class="w-full h-full object-cover absolute inset-0 opacity-40 card-image" data-alt="A warm, crackling campfire surrounded by rustic seating in a dark, atmospheric outdoor setting. Sparks fly gently into the night sky, and the orange glow of the fire contrasts sharply with the deep twilight blue of the surrounding forest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG4fMWpU3OLZiAuSuX_0Gp1DKhySDbc0ehqmLgWZ9GLLil9DisoOKh9RVNwZYrMiDBIwL8x9Az4dVGDpjQFx42PHWru5tbbTQEL-l7gyB_ult9uBYOhPhYb5qqRFcEySwqSUQHBvkE_NDd8szYq_lWBbIiSeduNH0gbr--6nC4je0ITzFZbrgNEymjXfVgek0R-qRw_X3MFLC9sgQ8Qj_5fE5ngTOyFt2YgAJJQgL4ALKFO8b6MpqRdenG6yPqHeNbAw9pJ7r4Emk"/>
+</div>
+<!-- Indoor Games -->
+<div class="col-span-1 row-span-1 relative rounded-lg overflow-hidden border border-antique-gold/30 group bg-surface facility-small">
+<div class="absolute inset-0 flex flex-col justify-center items-center p-4 text-center z-10">
+<span class="material-symbols-outlined text-antique-gold text-4xl mb-2" data-icon="sports_esports">sports_esports</span>
+<h3 class="font-headline-md text-lg text-deep-forest">Indoor Games</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Outdoor Experiences -->
+<section class="py-xl max-w-max-width mx-auto px-lg experiences-section" id="experiences">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline-md text-headline-md text-deep-forest mb-4">Curated Experiences</h2>
+<p class="text-on-surface-variant max-w-xl">Explore the rugged beauty of the Western Ghats with our guided outdoor activities.</p>
+</div>
+<div class="hidden md:flex gap-2">
+<button class="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Scroll Area -->
+<div class="flex overflow-x-auto gap-md pb-8 hide-scrollbar snap-x experiences-container">
+<!-- Exp 1 -->
+<div class="min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card">
+<div class="h-48 relative image-container">
+<img class="w-full h-full object-cover card-image" data-alt="An off-road jeep driving through a rugged dirt path in a dense, green forest. The scene is slightly misty, adding a sense of adventure and mystery. The vehicle kicks up a little dust, and sunlight filters through the tall trees." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjt01EUHqsm9ClNSxPtOqvFkVebeYMSiTLDCDkfKuggPSnIQaZiDHesX-f3W2o_iIffZJ-U_vNqeK7ku0tS1_I0eDY7abBQTATX7a4YlcWKSRcc05DkEal-yp-At8G8Gyp4kNtr_rkfJgKdkkCmqpyoBA0FPdsKNaspdTx1hfoREPhV-nuypp0cIQ2FAfnJSReaZmTAVbB1ZTRCPwzkXYp30JA3r92uhMW-1REzrvaZKCf01_IFbT2BDiTPprkcNQ3ZAyMc5b4U8M"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-xl text-deep-forest mb-2">Jeep Safari</h3>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Thrilling off-road adventure through dense forests and rugged terrains.</p>
+<button class="flex items-center gap-2 text-xs font-label-caps text-label-caps bg-surface-variant px-3 py-1.5 rounded-full text-deep-forest hover:bg-antique-gold/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                        ADD TO ITINERARY
+                    </button>
+</div>
+</div>
+<!-- Exp 2 -->
+<div class="min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card">
+<div class="h-48 relative image-container">
+<img class="w-full h-full object-cover card-image" data-alt="A lush, green tea plantation covering rolling hills. The neat rows of tea bushes create beautiful patterns across the landscape. In the background, misty mountains rise up under a clear sky. A narrow path winds through the plantation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVq7Y1HTFjEAgJCHnv2S_wY3I2aiQUrwo1ykyqd_fYSRJla5q1NDEMqJ5ovwVTMpF1fLVcTnSwwgaTrol7V4uhhFP13ySk-S9SI4Xou3Kzq9xS6Oellge6ZpT8R4X2Q6IAZiprayl6P14muNE5jvA2Boyvb_icv4WK7fDZIuR1LKmR2MxmGf--Tdabn-NhbNlZy3GbaBExMyrUhTLXxSKf9Hz3y1__tzXOW6SbpdZGyz5KEifDr3PaNZOdR0KGwkyPOL7hLrt91wk"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-xl text-deep-forest mb-2">Plantation Visit</h3>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Guided tour through fragrant spice and lush tea gardens.</p>
+<button class="flex items-center gap-2 text-xs font-label-caps text-label-caps bg-surface-variant px-3 py-1.5 rounded-full text-deep-forest hover:bg-antique-gold/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                        ADD TO ITINERARY
+                    </button>
+</div>
+</div>
+<!-- Exp 3 -->
+<div class="min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card">
+<div class="h-48 relative image-container">
+<img class="w-full h-full object-cover card-image" data-alt="A scenic hiking trail on a grassy mountain ridge. The trail overlooks a deep, forested valley. The lighting suggests early morning or late afternoon, with soft, golden light highlighting the texture of the grass and rocks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCUNkfJzZAvk8J0cQw1y-zmFpKvYcYTFJvB63-Qv6rUe-C8R26UWTtMw8RECynkay4IKkVyboFIrIPfb2yb1mo_Jgl1H1oR3_RYV4ZXD_bOzw52-u0dD-Y8nCbubl8u08by8cSv9llLRSTDgf-YStU18a85rCMdboN8c9X_u2hjt4V4_YAhRyGQnOtLO3vydheQega1H_dXy7h-Wgz_Jy2sNgqt1aMguyepxB_BmszRzdGEQhlpF47x95q91jZ4RND-HIDz-wEEVs"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-xl text-deep-forest mb-2">Trekking</h3>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Conquer scenic trails and witness breathtaking valley panoramas.</p>
+<button class="flex items-center gap-2 text-xs font-label-caps text-label-caps bg-surface-variant px-3 py-1.5 rounded-full text-deep-forest hover:bg-antique-gold/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                        ADD TO ITINERARY
+                    </button>
+</div>
+</div>
+<!-- Exp 4 -->
+<div class="min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card">
+<div class="h-48 relative image-container">
+<img class="w-full h-full object-cover card-image" data-alt="A majestic elephant standing calmly in a forest clearing near a river. The elephant is adorned with a simple, traditional cloth. The surrounding forest is dense and green, with sunlight dappling through the canopy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9PMo67V6nHUvKBEq7FefipXoSU-tKQR6RiFPjGFUbWLXaKd9keYUZswjYyOY4VWomgtGbCkI_Yd7g_PCq7BGsjnMpXpfGoLv5KlYhoRjugVSVLGQTBPnvmsHeTfXZ6x3JdI4THNvZT3fXqlY-H5iuFfjQ7RS8ifxy8Eonx1_IQOEgACUS-kXXh3heG9SSDTv7nxqwboXmE3oyWDvrEU7Z_EpYBhTYuGRFROX5WvI0g5yPqDXBx6k95JQQ1ZQzxDZjU633jwF70F4"/>
+</div>
+<div class="p-6">
+<h3 class="font-headline-md text-xl text-deep-forest mb-2">Elephant Safari</h3>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">A gentle ride through the sanctuary observing local wildlife.</p>
+<button class="flex items-center gap-2 text-xs font-label-caps text-label-caps bg-surface-variant px-3 py-1.5 rounded-full text-deep-forest hover:bg-antique-gold/20 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                        ADD TO ITINERARY
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer (JSON Injected) -->
+<footer class="bg-deep-forest w-full border-t border-antique-gold/20 mt-xl site-footer">
+<div class="flex flex-col md:flex-row justify-between items-center px-lg py-xl max-w-max-width mx-auto gap-md">
+<div class="text-center md:text-left mb-8 md:mb-0">
+<h2 class="font-headline-md text-headline-md text-antique-gold mb-2">Grand Sapphire Resorts</h2>
+<p class="text-on-primary-container text-sm">Idukki, Kerala, India</p>
+<div class="mt-4 text-on-primary-container text-sm">
+<p>Check-in: 2:00 PM</p>
+<p>Check-out: 11:00 AM</p>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-8 md:gap-16 text-center md:text-left">
+<div class="flex flex-col gap-4">
+<a class="text-on-primary-container hover:text-secondary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-on-primary-container hover:text-secondary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-4">
+<a class="text-on-primary-container hover:text-secondary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Contact Us</a>
+<a class="text-on-primary-container hover:text-secondary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Careers</a>
+</div>
+</div>
+</div>
+<div class="border-t border-on-primary-container/20 py-6 text-center">
+<p class="text-on-primary-container text-sm opacity-80">© 2024 Grand Sapphire Resorts Idukki. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // WebGL Shader Setup for Hero
+        function initShader() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            const canvas = document.getElementById('hero-shader-canvas');
+            if (!canvas) return;
+            
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return;
+
+            // Resize canvas to fill window
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            const vertexShaderSource = `
+                attribute vec2 position;
+                varying vec2 v_texCoord;
+                void main() {
+                    gl_Position = vec4(position, 0.0, 1.0);
+                    v_texCoord = position * 0.5 + 0.5;
+                }
+            `;
+
+            const fragmentShaderSource = `
+precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Base twilight colors derived from the design system
+    vec3 skyColor = vec3(0.05, 0.1, 0.18); // Twilight navy #0D1B2E approx
+    vec3 glowColor = vec3(0.07, 0.18, 0.13); // Deep forest green #122E22 approx
+    vec3 amberColor = vec3(0.94, 0.66, 0.31) * 0.2; // Dimmed amber glow #F0A94E
+    
+    // Slow undulating noise/mist effect
+    float mist = sin(uv.x * 2.0 + u_time * 0.2) * cos(uv.y * 3.0 - u_time * 0.15);
+    mist += 0.5 * sin(uv.x * 4.0 - u_time * 0.3) * cos(uv.y * 2.0 + u_time * 0.1);
+    
+    // Color mixing based on coordinates and mist
+    vec3 finalColor = mix(skyColor, glowColor, uv.y + mist * 0.1);
+    
+    // Add a soft horizontal horizon glow
+    float horizon = 1.0 - smoothstep(0.0, 0.8, abs(uv.y - 0.4 + mist * 0.05));
+    finalColor += amberColor * horizon;
+    
+    // Subtle vignette
+    float vignette = 1.0 - smoothstep(0.5, 1.5, length(uv - 0.5));
+    finalColor *= vignette;
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}
+            `;
+
+            function createShader(gl, type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Program link error:', gl.getProgramInfoLog(program));
+                return;
+            }
+
+            gl.useProgram(program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const positions = new Float32Array([
+                -1.0, -1.0,
+                 1.0, -1.0,
+                -1.0,  1.0,
+                -1.0,  1.0,
+                 1.0, -1.0,
+                 1.0,  1.0,
+            ]);
+            gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'position');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const timeLocation = gl.getUniformLocation(program, 'u_time');
+            const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+
+            function render(time) {
+                gl.uniform1f(timeLocation, time * 0.001);
+                gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+                
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        }
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+        });
+
+        // Motion System Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initShader();
+            
+            // Check for reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Initialize Lenis Smooth Scrolling
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                mouseMultiplier: 1,
+                smoothTouch: false,
+                touchMultiplier: 2,
+                infinite: false,
+            });
+
+            // Sync Lenis with GSAP ScrollTrigger
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
+
+            // Register GSAP plugins
+            gsap.registerPlugin(ScrollTrigger);
+
+            if (prefersReducedMotion) {
+                // Reduced Motion: Simple Fades
+                gsap.to('.hero-bg', { opacity: 1, duration: 0.5 });
+                gsap.to('.hero-overlay', { opacity: 1, duration: 0.5 });
+                gsap.fromTo('.hero-headline', { opacity: 0 }, { opacity: 1, duration: 1 });
+                gsap.fromTo('.hero-cta', { opacity: 0 }, { opacity: 1, duration: 1, delay: 0.5 });
+                
+                const sections = ['.trust-strip-section', '.accommodations-section', '.facilities-section', '.experiences-section', '.site-footer'];
+                sections.forEach(section => {
+                    gsap.fromTo(section, 
+                        { opacity: 0 }, 
+                        { 
+                            opacity: 1, 
+                            duration: 1, 
+                            scrollTrigger: {
+                                trigger: section,
+                                start: "top 80%",
+                                once: true
+                            }
+                        }
+                    );
+                });
+            } else {
+                // Full Motion System
+                
+                // Hero Animation
+                const headlineText = new SplitType('.hero-headline', { types: 'lines' });
+                
+                // Wrap lines for overflow hidden reveal
+                headlineText.lines.forEach(line => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('line-wrapper');
+                    wrapper.style.overflow = 'hidden';
+                    line.parentNode.insertBefore(wrapper, line);
+                    wrapper.appendChild(line);
+                });
+
+                const heroTl = gsap.timeline();
+                
+                heroTl
+                    .fromTo('.hero-bg', { opacity: 0, scale: 1.05 }, { opacity: 0.7, scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
+                    .fromTo('.hero-overlay', { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power2.out' }, 0)
+                    .fromTo(headlineText.lines, 
+                        { y: '100%', opacity: 0, rotateX: 10 }, 
+                        { y: '0%', opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.15, ease: 'power3.out' }, 
+                        0.5
+                    )
+                    .fromTo('.hero-cta', 
+                        { opacity: 0, y: 30 }, 
+                        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 
+                        1.2
+                    );
+
+                // Section Entrances
+                
+                // Trust Strip
+                gsap.fromTo('.trust-strip-content',
+                    { opacity: 0, y: 20 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 0.8, 
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: '.trust-strip-section',
+                            start: 'top 90%',
+                            once: true
+                        }
+                    }
+                );
+
+                // Accommodations
+                gsap.fromTo('.accommodation-card',
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        stagger: 0.15,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: '.accommodations-section',
+                            start: 'top 80%',
+                            once: true
+                        }
+                    }
+                );
+
+                // Curated Experiences
+                gsap.fromTo('.experience-card',
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        stagger: 0.15,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: '.experiences-section',
+                            start: 'top 80%',
+                            once: true
+                        }
+                    }
+                );
+
+                // Resort Facilities
+                const facilitiesTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: '.facilities-section',
+                        start: 'top 75%',
+                        once: true
+                    }
+                });
+
+                facilitiesTl
+                    .fromTo('.facility-large-img',
+                        { scale: 1.05, opacity: 0 },
+                        { scale: 1, opacity: 1, duration: 1.2, ease: 'power3.out' }
+                    )
+                    .fromTo('.facility-small',
+                        { opacity: 0, y: 30 },
+                        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
+                        '-=0.8'
+                    );
+
+                // Footer
+                gsap.fromTo('.site-footer',
+                    { opacity: 0, y: 30 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: '.site-footer',
+                            start: 'top 95%',
+                            once: true
+                        }
+                    }
+                );
+
+                // Scroll Scrub: Card Images Scale
+                gsap.utils.toArray('.card-image').forEach(img => {
+                    gsap.fromTo(img, 
+                        { scale: 1.1 },
+                        {
+                            scale: 1.0,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: img.closest('.image-container') || img.parentElement,
+                                start: 'top bottom',
+                                end: 'bottom top',
+                                scrub: true
+                            }
+                        }
+                    );
+                });
+            }
+        });
+    </script>
+</body></html>

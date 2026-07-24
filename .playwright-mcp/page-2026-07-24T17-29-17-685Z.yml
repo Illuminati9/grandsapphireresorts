@@ -1,0 +1,224 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - navigation "Main navigation" [ref=f3e3]:
+      - link "Grand Sapphire Resorts - Home" [ref=f3e4] [cursor=pointer]:
+        - /url: /
+        - text: Grand Sapphire Resorts
+      - generic [ref=f3e5]:
+        - link "Villas" [ref=f3e6] [cursor=pointer]:
+          - /url: "#villas"
+        - link "Facilities" [ref=f3e7] [cursor=pointer]:
+          - /url: "#facilities"
+        - link "Experiences" [ref=f3e8] [cursor=pointer]:
+          - /url: "#experiences"
+        - link "Location" [ref=f3e9] [cursor=pointer]:
+          - /url: "#location"
+        - generic [ref=f3e10]:
+          - generic [ref=f3e11]: EN
+          - generic [ref=f3e12]: ML
+        - button "Book Now" [ref=f3e13] [cursor=pointer]
+  - main [ref=f3e15]:
+    - region [ref=f3e16]:
+      - img "Grand Sapphire Resort at twilight" [ref=f3e19]
+      - generic [ref=f3e21]:
+        - heading "Unwind in Nature, Live in Luxury" [level=1] [ref=f3e22]
+        - button "Book Your Stay" [ref=f3e23] [cursor=pointer]
+    - region "Trust indicators" [ref=f3e24]:
+      - generic [ref=f3e26]:
+        - generic [ref=f3e27]:
+          - generic [ref=f3e28]: support_agent
+          - generic [ref=f3e29]: 24/7 ASSISTANCE
+        - generic [ref=f3e30]:
+          - generic [ref=f3e31]: videocam
+          - generic [ref=f3e32]: CCTV SECURITY
+        - generic [ref=f3e33]:
+          - generic [ref=f3e34]: wifi
+          - generic [ref=f3e35]: FREE WI-FI
+        - generic [ref=f3e36]:
+          - generic [ref=f3e37]: family_restroom
+          - generic [ref=f3e38]: FAMILY FRIENDLY
+        - generic [ref=f3e39]:
+          - generic [ref=f3e40]: call
+          - link "+91 123 456 7890" [ref=f3e41] [cursor=pointer]:
+            - /url: tel:+911234567890
+    - region [ref=f3e42]:
+      - generic [ref=f3e43]:
+        - heading "Accommodations" [level=2] [ref=f3e44]
+        - paragraph [ref=f3e45]: Discover our thoughtfully designed spaces, blending rustic charm with modern comfort.
+      - list "Villa options" [ref=f3e46]:
+        - listitem [ref=f3e47]:
+          - img "A luxurious hotel room with a large window showing a misty mountain view at sunrise. The room features a plush king-sized bed with crisp white linens, a comfortable seating area, and elegant wooden accents." [ref=f3e50]
+          - generic [ref=f3e51]:
+            - heading "Deluxe Mountain View" [level=3] [ref=f3e52]
+            - paragraph [ref=f3e53]: Spacious room offering panoramic views of the Western Ghats.
+            - generic [ref=f3e54]:
+              - generic [ref=f3e55]:
+                - paragraph [ref=f3e56]: Starting from
+                - paragraph [ref=f3e57]: ₹6,500 /night
+              - button "Reserve" [ref=f3e58] [cursor=pointer]
+        - listitem [ref=f3e59]:
+          - img "A spacious and cozy family dormitory room in a mountain resort. The room has multiple comfortable beds arranged neatly, with warm lighting and wooden paneling on the walls. Large windows let in natural light, revealing a lush green forest outside." [ref=f3e62]
+          - generic [ref=f3e63]:
+            - heading "Family Dormitory" [level=3] [ref=f3e64]
+            - paragraph [ref=f3e65]: Perfect for large groups, featuring comfortable bunk beds and ample space.
+            - generic [ref=f3e66]:
+              - generic [ref=f3e67]:
+                - paragraph [ref=f3e68]: Starting from
+                - paragraph [ref=f3e69]: ₹12,000 /night
+              - button "Reserve" [ref=f3e70] [cursor=pointer]
+        - listitem [ref=f3e71]:
+          - img "A stunning superior villa nestled in a lush hillside. The villa features a modern architectural design with large glass walls, surrounded by dense tropical foliage. A private infinity pool reflects the twilight sky. Warm lights illuminate the interior, contrasting beautifully with the cool, dark exterior environment." [ref=f3e74]
+          - generic [ref=f3e75]:
+            - heading "Superior Villa" [level=3] [ref=f3e76]
+            - paragraph [ref=f3e77]: An exclusive retreat with a private balcony and premium amenities.
+            - generic [ref=f3e78]:
+              - generic [ref=f3e79]:
+                - paragraph [ref=f3e80]: Starting from
+                - paragraph [ref=f3e81]: ₹18,500 /night
+              - button "Reserve" [ref=f3e82] [cursor=pointer]
+    - region [ref=f3e83]:
+      - generic [ref=f3e84]:
+        - generic [ref=f3e85]:
+          - heading "Resort Facilities" [level=2] [ref=f3e86]
+          - paragraph [ref=f3e87]: Everything you need for a comfortable and memorable stay.
+        - list "Facilities" [ref=f3e88]:
+          - listitem [ref=f3e89]:
+            - img "Dining & Room Service at Grand Sapphire Resorts" [ref=f3e91]
+            - generic [ref=f3e93]:
+              - generic [ref=f3e94]: restaurant
+              - heading "Dining & Room Service" [level=3] [ref=f3e95]
+              - paragraph [ref=f3e96]: Savor local delicacies and international cuisine.
+          - listitem [ref=f3e97]:
+            - generic [ref=f3e98]:
+              - generic [ref=f3e99]: pool
+              - generic [ref=f3e100]:
+                - heading "Swimming Pool" [level=3] [ref=f3e101]
+                - paragraph [ref=f3e102]: Infinity edge with valley views.
+            - img "Swimming Pool at Grand Sapphire Resorts" [ref=f3e105]
+          - listitem [ref=f3e107]:
+            - generic [ref=f3e108]:
+              - generic [ref=f3e109]: local_fire_department
+              - heading "Camp Fire" [level=3] [ref=f3e110]
+            - img "Camp Fire at Grand Sapphire Resorts" [ref=f3e112]
+          - listitem [ref=f3e113]:
+            - generic [ref=f3e114]:
+              - generic [ref=f3e115]: sports_esports
+              - heading "Indoor Games" [level=3] [ref=f3e116]
+    - region [ref=f3e117]:
+      - generic [ref=f3e118]:
+        - generic [ref=f3e119]:
+          - heading "Curated Experiences" [level=2] [ref=f3e120]
+          - paragraph [ref=f3e121]: Explore the rugged beauty of the Western Ghats with our guided outdoor activities.
+        - generic [ref=f3e122]:
+          - button "Previous experience" [ref=f3e123] [cursor=pointer]:
+            - generic [ref=f3e124]: arrow_back
+          - button "Next experience" [ref=f3e125] [cursor=pointer]:
+            - generic [ref=f3e126]: arrow_forward
+      - list "Experiences carousel" [ref=f3e127]:
+        - listitem [ref=f3e128]:
+          - img "An off-road jeep driving through a rugged dirt path in a dense, green forest. The scene is slightly misty, adding a sense of adventure and mystery. The vehicle kicks up a little dust, and sunlight filters through the tall trees." [ref=f3e131]
+          - generic [ref=f3e132]:
+            - heading "Jeep Safari" [level=3] [ref=f3e133]
+            - paragraph [ref=f3e134]: Thrilling off-road adventure through dense forests and rugged terrains.
+            - button "Add to Itinerary" [ref=f3e135] [cursor=pointer]:
+              - generic [ref=f3e136]: add
+              - text: Add to Itinerary
+        - listitem [ref=f3e137]:
+          - img "A lush, green tea plantation covering rolling hills. The neat rows of tea bushes create beautiful patterns across the landscape. In the background, misty mountains rise up under a clear sky. A narrow path winds through the plantation." [ref=f3e140]
+          - generic [ref=f3e141]:
+            - heading "Plantation Visit" [level=3] [ref=f3e142]
+            - paragraph [ref=f3e143]: Guided tour through fragrant spice and lush tea gardens.
+            - button "Add to Itinerary" [ref=f3e144] [cursor=pointer]:
+              - generic [ref=f3e145]: add
+              - text: Add to Itinerary
+        - listitem [ref=f3e146]:
+          - img "A scenic hiking trail on a grassy mountain ridge. The trail overlooks a deep, forested valley. The lighting suggests early morning or late afternoon, with soft, golden light highlighting the texture of the grass and rocks." [ref=f3e149]
+          - generic [ref=f3e150]:
+            - heading "Trekking" [level=3] [ref=f3e151]
+            - paragraph [ref=f3e152]: Conquer scenic trails and witness breathtaking valley panoramas.
+            - button "Add to Itinerary" [ref=f3e153] [cursor=pointer]:
+              - generic [ref=f3e154]: add
+              - text: Add to Itinerary
+        - listitem [ref=f3e155]:
+          - img "A majestic elephant standing calmly in a forest clearing near a river. The elephant is adorned with a simple, traditional cloth. The surrounding forest is dense and green, with sunlight dappling through the canopy." [ref=f3e158]
+          - generic [ref=f3e159]:
+            - heading "Elephant Safari" [level=3] [ref=f3e160]
+            - paragraph [ref=f3e161]: A gentle ride through the sanctuary observing local wildlife.
+            - button "Add to Itinerary" [ref=f3e162] [cursor=pointer]:
+              - generic [ref=f3e163]: add
+              - text: Add to Itinerary
+    - region [ref=f3e164]:
+      - generic [ref=f3e165]:
+        - generic [ref=f3e166]:
+          - heading "Visit Us" [level=2] [ref=f3e167]
+          - paragraph [ref=f3e168]: Nestled in the serene Western Ghats of Idukki, Kerala — where misty mountains meet warm hospitality.
+          - generic [ref=f3e169]:
+            - generic [ref=f3e170]:
+              - generic [ref=f3e171]: location_on
+              - generic [ref=f3e172]:
+                - paragraph [ref=f3e173]: Address
+                - paragraph [ref=f3e174]: Grand Sapphire Resorts, Idukki, Kerala, India
+            - generic [ref=f3e175]:
+              - generic [ref=f3e176]: login
+              - generic [ref=f3e177]:
+                - paragraph [ref=f3e178]: Check-in
+                - paragraph [ref=f3e179]: 2:00 PM
+            - generic [ref=f3e180]:
+              - generic [ref=f3e181]: logout
+              - generic [ref=f3e182]:
+                - paragraph [ref=f3e183]: Check-out
+                - paragraph [ref=f3e184]: 11:00 AM
+            - generic [ref=f3e185]:
+              - generic [ref=f3e186]: call
+              - generic [ref=f3e187]:
+                - paragraph [ref=f3e188]: Phone
+                - link "+91 123 456 7890" [ref=f3e189] [cursor=pointer]:
+                  - /url: tel:+91 123 456 7890
+            - generic [ref=f3e190]:
+              - generic [ref=f3e191]: email
+              - generic [ref=f3e192]:
+                - paragraph [ref=f3e193]: Email
+                - link "reservations@grandsapphireresorts.com" [ref=f3e194] [cursor=pointer]:
+                  - /url: mailto:reservations@grandsapphireresorts.com
+            - generic [ref=f3e195]:
+              - generic [ref=f3e196]: map
+              - generic [ref=f3e197]:
+                - paragraph [ref=f3e198]: Coordinates
+                - paragraph [ref=f3e199]: 9.8450° N, 76.9838° E
+        - generic [ref=f3e200]:
+          - iframe [ref=f3e202]
+          - generic [ref=f3e203]:
+            - heading "Getting Here" [level=3] [ref=f3e204]
+            - list [ref=f3e205]:
+              - listitem [ref=f3e206]:
+                - generic [ref=f3e207]: local_airport
+                - text: "Nearest Airport: Cochin (COK) — 110 km"
+              - listitem [ref=f3e208]:
+                - generic [ref=f3e209]: train
+                - text: "Nearest Railway: Kottayam — 85 km"
+              - listitem [ref=f3e210]:
+                - generic [ref=f3e211]: directions_car
+                - text: Private transfers available on request
+  - contentinfo [ref=f3e212]:
+    - generic [ref=f3e213]:
+      - generic [ref=f3e214]:
+        - link "Grand Sapphire Resorts - Home" [ref=f3e215] [cursor=pointer]:
+          - /url: /
+          - text: Grand Sapphire Resorts
+        - paragraph [ref=f3e216]: Idukki, Kerala, India
+        - generic [ref=f3e217]:
+          - paragraph [ref=f3e218]: "Check-in: 2:00 PM"
+          - paragraph [ref=f3e219]: "Check-out: 11:00 AM"
+      - generic [ref=f3e220]:
+        - navigation "Legal links" [ref=f3e221]:
+          - link "Privacy Policy" [ref=f3e222] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=f3e223] [cursor=pointer]:
+            - /url: "#"
+        - navigation "Contact links" [ref=f3e224]:
+          - link "Contact Us" [ref=f3e225] [cursor=pointer]:
+            - /url: "#"
+          - link "Careers" [ref=f3e226] [cursor=pointer]:
+            - /url: "#"
+    - paragraph [ref=f3e228]: © 2024 Grand Sapphire Resorts Idukki. All rights reserved.
+  - alert [ref=f3e229]
