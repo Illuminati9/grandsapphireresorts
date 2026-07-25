@@ -43,15 +43,17 @@ export function Navbar() {
         id="mainNav"
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-warm-ivory/90 backdrop-blur-lg py-md shadow-[0_1px_3px_rgba(0,0,0,0.05)] nav-scrolled"
-            : "bg-warm-ivory/10 backdrop-blur-sm py-md"
+            ? "bg-warm-ivory/95 backdrop-blur-lg py-md shadow-[0_1px_3px_rgba(0,0,0,0.05)] nav-scrolled"
+            : "bg-deep-forest/70 backdrop-blur-md py-md shadow-[0_4px_24px_rgba(0,0,0,0.12)]"
         }`}
         role="banner"
       >
         <nav className="flex justify-between items-center px-lg max-w-content mx-auto" aria-label="Main navigation">
           <Link
             href="/"
-            className="font-headline text-headline-md text-warm-ivory nav-scrolled:text-deep-forest transition-colors brand-logo"
+            className={`font-brand text-2xl md:text-3xl font-normal tracking-normal leading-none transition-colors brand-logo ${
+              isScrolled ? "text-deep-forest" : "text-warm-ivory"
+            }`}
             aria-label="Grand Sapphire Resorts - Home"
           >
             Grand Sapphire Resorts
@@ -62,17 +64,21 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-medium text-warm-ivory nav-scrolled:text-deep-forest hover:text-antique-gold transition-colors duration-300 nav-link"
+                className={`font-medium hover:text-antique-gold transition-colors duration-300 nav-link ${
+                  isScrolled ? "text-deep-forest" : "text-warm-ivory"
+                }`}
               >
                 {link.label}
               </Link>
             ))}
 
-            <div className="flex items-center gap-sm ml-md border-l border-warm-ivory/30 nav-scrolled:border-deep-forest/30 pl-md">
-              <span className="font-medium text-sm text-warm-ivory nav-scrolled:text-deep-forest nav-link">
+            <div className={`flex items-center gap-sm ml-md border-l pl-md ${
+              isScrolled ? "border-deep-forest/30" : "border-warm-ivory/30"
+            }`}>
+              <span className={`font-medium text-sm ${isScrolled ? "text-deep-forest" : "text-warm-ivory"}`}>
                 EN
               </span>
-              <span className="font-medium text-sm text-warm-ivory/50 nav-scrolled:text-deep-forest/50 nav-link">
+              <span className={`font-medium text-sm ${isScrolled ? "text-deep-forest/50" : "text-warm-ivory/50"}`}>
                 ML
               </span>
             </div>
@@ -88,7 +94,9 @@ export function Navbar() {
 
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden text-warm-ivory nav-scrolled:text-deep-forest nav-link"
+            className={`md:hidden transition-colors ${
+              isScrolled ? "text-deep-forest" : "text-warm-ivory"
+            }`}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}

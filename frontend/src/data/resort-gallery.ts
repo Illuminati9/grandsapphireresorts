@@ -5,31 +5,27 @@ export interface ResortGalleryImage {
 
 export const resortGalleryImages: ResortGalleryImage[] = [
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.12 AM.jpeg",
-    alt: "Grand Sapphire Resorts - Main entrance and reception area",
+    src: "/images/resort/bedroom.jpeg",
+    alt: "Grand Sapphire Resorts - Cozy bedroom suite",
   },
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.12 AM (1).jpeg",
-    alt: "Grand Sapphire Resorts - Luxury villa with mountain view",
+    src: "/images/resort/hangout_area_outside.jpeg",
+    alt: "Grand Sapphire Resorts - Outdoor hangout area",
   },
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.12 AM (2).jpeg",
-    alt: "Grand Sapphire Resorts - Infinity pool overlooking valley",
+    src: "/images/resort/living_room.jpeg",
+    alt: "Grand Sapphire Resorts - Spacious living room",
   },
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.13 AM.jpeg",
-    alt: "Grand Sapphire Resorts - Fine dining restaurant interior",
+    src: "/images/resort/stairs.jpeg",
+    alt: "Grand Sapphire Resorts - Elegant staircase",
   },
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.13 AM (1).jpeg",
-    alt: "Grand Sapphire Resorts - Spa and wellness center",
+    src: "/images/resort/swimming_pool.jpeg",
+    alt: "Grand Sapphire Resorts - Swimming pool with a relaxing view",
   },
   {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.14 AM.jpeg",
-    alt: "Grand Sapphire Resorts - Campfire evening setup",
-  },
-  {
-    src: "/images/resort/WhatsApp Image 2026-07-24 at 11.05.15 AM.jpeg",
-    alt: "Grand Sapphire Resorts - Nature trail and forest view",
+    src: "/images/resort/tv_in_hall_and_kitchen.jpeg",
+    alt: "Grand Sapphire Resorts - Hall and kitchen with TV area",
   },
 ];

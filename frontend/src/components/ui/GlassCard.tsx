@@ -3,7 +3,7 @@
 import { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
 
 export interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "experience" | "amenity";
+  variant?: "default" | "experience" | "amenity" | "luxury" | "glass" | "glass-dark";
   hover?: boolean;
 }
 
@@ -13,6 +13,9 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
       default: "card",
       experience: "rounded-card border border-outline-variant/20 bg-surface-container-low p-0 overflow-hidden",
       amenity: "rounded-chip bg-transparent p-3",
+      luxury: "rounded-luxury bg-surface-container-lowest border border-antique-gold/20 p-0 overflow-hidden",
+      glass: "glass-card rounded-luxury p-0 overflow-hidden",
+      "glass-dark": "glass-card-dark rounded-luxury p-0 overflow-hidden text-warm-ivory",
     };
 
     const hoverStyles = hover ? "hover:shadow-[var(--shadow-card-hover)]" : "";

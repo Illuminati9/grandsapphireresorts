@@ -9,6 +9,7 @@ import { AmenitiesSection } from "@/components/sections";
 import { ExperiencesSection } from "@/components/sections";
 import { LocationSection } from "@/components/sections";
 import { ResortShowcaseSection } from "@/components/sections";
+import { TestimonialsSection } from "@/components/sections";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <ResortShowcaseSection />
         <AmenitiesSection />
         <ExperiencesSection />
+        <TestimonialsSection />
         <LocationSection />
       </main>
       <Footer />

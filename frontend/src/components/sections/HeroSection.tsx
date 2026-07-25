@@ -1,10 +1,39 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui";
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    shouldReduceMotion ? [0, 0] : [0, 120]
+  );
+  const imageScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    shouldReduceMotion ? [1, 1] : [1.08, 1]
+  );
+  const contentY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    shouldReduceMotion ? [0, 0] : [0, -80]
+  );
+  const contentOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.7],
+    shouldReduceMotion ? [1, 1] : [1, 0]
+  );
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -131,22 +160,34 @@ void main() {
   }, []);
 
   return (
-    <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden" aria-labelledby="hero-title">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden"
+      aria-labelledby="hero-title"
+    >
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full z-0"
         id="hero-shader-canvas"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 z-0">
+      <motion.div
+        className="absolute inset-0 z-0 will-change-transform"
+        style={{ y: imageY, scale: imageScale }}
+      >
         <img
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhg66ONDmAgn_Edn-CJhUsTTHf5ys_5umEJTksrPgE6gDW5B98Ajea_iAQE9BcIG5qW4rI1LnJhCCqNUVKjCa9Sswy9dAgRDwsg47nZLOrbcK2EKDOnjgxGLeDgoQgQMbNC4WkCxk8cMqgmnMYZKqATFAFeGkB3mtDrTs18JVrMy5-oMm73j_NIEcY4kBrRs_Th683kT6FbLoY3AcczopBpXDw3qRL0oPMR84IETxzwMdQlpEsZ4C41pGilbPj7GbIzIjpacBwjc"
           alt="Grand Sapphire Resort at twilight"
           className="w-full h-full object-cover hero-bg opacity-70 mix-blend-overlay"
         />
         <div className="absolute inset-0 bg-twilight-navy/30 hero-overlay" />
-      </div>
-      <div className="relative z-10 text-center px-4 flex flex-col items-center mt-xl">
+      </motion.div>
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-warm-ivory to-transparent z-[1]" aria-hidden="true" />
+      <motion.div
+        className="relative z-10 text-center px-4 flex flex-col items-center mt-xl will-change-transform"
+        style={{ y: contentY, opacity: contentOpacity }}
+      >
         <h1
           id="hero-title"
           className="font-headline text-headline-lg-mobile md:text-headline-lg text-warm-ivory mb-6 max-w-4xl drop-shadow-lg hero-headline"
@@ -160,7 +201,7 @@ void main() {
         >
           Book Your Stay
         </Button>
-      </div>
+      </motion.div>
     </section>
   );
 }
