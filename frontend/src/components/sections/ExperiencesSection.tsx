@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { CardImage, CardContent, CardTitle, CardAction } from "@/components/ui";
+import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { CardImage, CardContent, CardTitle } from "@/components/ui";
 
 const experiences = [
   {
@@ -35,6 +36,22 @@ const experiences = [
 ];
 
 export function ExperiencesSection() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const scrollCarousel = (direction: 1 | -1) => {
+    const carousel = carouselRef.current;
+    const card = carousel?.querySelector<HTMLElement>("[data-experience-card]");
+
+    if (!carousel || !card) return;
+
+    const gap = Number.parseFloat(window.getComputedStyle(carousel).gap) || 0;
+    carousel.scrollBy({
+      left: direction * (card.getBoundingClientRect().width + gap),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
+
   return (
     <section id="experiences" className="py-xl max-w-content mx-auto px-lg experiences-section" aria-labelledby="experiences-title">
       <div className="flex justify-between items-end mb-12">
@@ -60,16 +77,30 @@ export function ExperiencesSection() {
           </motion.p>
         </div>
         <div className="hidden md:flex gap-2">
-          <button className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors" aria-label="Previous experience">
+          <button
+            type="button"
+            className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
+            onClick={() => scrollCarousel(-1)}
+            aria-controls="experiences-carousel"
+            aria-label="Previous experience"
+          >
             <span className="material-symbols-outlined" data-icon="arrow_back" aria-hidden="true">arrow_back</span>
           </button>
-          <button className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors" aria-label="Next experience">
+          <button
+            type="button"
+            className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
+            onClick={() => scrollCarousel(1)}
+            aria-controls="experiences-carousel"
+            aria-label="Next experience"
+          >
             <span className="material-symbols-outlined" data-icon="arrow_forward" aria-hidden="true">arrow_forward</span>
           </button>
         </div>
       </div>
 
       <div
+        ref={carouselRef}
+        id="experiences-carousel"
         className="flex overflow-x-auto gap-md pb-8 hide-scrollbar snap-x experiences-container"
         data-lenis-prevent-horizontal
         role="list"
@@ -78,11 +109,16 @@ export function ExperiencesSection() {
         {experiences.map((experience, index) => (
           <motion.article
             key={experience.id}
-            className="min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card"
+            data-experience-card
+            className="group min-w-[300px] md:min-w-[350px] bg-surface rounded-lg overflow-hidden border border-antique-gold/20 snap-start experience-card interactive-card"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={reduceMotion ? undefined : { y: -6 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
+            transition={{
+              y: { type: "spring", stiffness: 260, damping: 22 },
+              opacity: { duration: 0.6, ease: "easeOut", delay: index * 0.1 },
+            }}
             role="listitem"
           >
             <div className="h-48 relative image-container">
@@ -90,7 +126,7 @@ export function ExperiencesSection() {
                 src={experience.image}
                 alt={experience.alt}
                 aspectRatio="video"
-                className="w-full h-full object-cover card-image"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] card-image"
               />
             </div>
             <CardContent className="p-6">
@@ -98,13 +134,6 @@ export function ExperiencesSection() {
                 {experience.name}
               </CardTitle>
               <p className="text-sm text-on-surface-variant mb-6 line-clamp-2">{experience.description}</p>
-              <CardAction
-                variant="ghost"
-                className="flex items-center gap-2 text-xs font-label-caps text-label-caps bg-surface-variant px-3 py-1.5 rounded-full text-deep-forest hover:bg-antique-gold/20 transition-colors"
-              >
-                <span className="material-symbols-outlined text-[16px]" data-icon="add" aria-hidden="true">add</span>
-                Add to Itinerary
-              </CardAction>
             </CardContent>
           </motion.article>
         ))}
