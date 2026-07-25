@@ -13,3 +13,4 @@ export {
   type CardTitleProps,
 } from "./GlassCard";
 export { Container, Section, type ContainerProps, type SectionProps } from "./Container";
+export { CylinderCarousel, type CarouselImage, type CylinderCarouselProps } from "./cylinder-carousel";

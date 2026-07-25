@@ -8,6 +8,7 @@ import { SuitesSection } from "@/components/sections";
 import { AmenitiesSection } from "@/components/sections";
 import { ExperiencesSection } from "@/components/sections";
 import { LocationSection } from "@/components/sections";
+import { ResortShowcaseSection } from "@/components/sections";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
         <HeroSection />
         <TrustStripSection />
         <SuitesSection />
+        <ResortShowcaseSection />
         <AmenitiesSection />
         <ExperiencesSection />
         <LocationSection />

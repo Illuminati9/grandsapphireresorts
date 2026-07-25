@@ -91,32 +91,6 @@ export function LocationSection() {
               className="w-full h-full"
             />
           </div>
-
-          <motion.div
-            className="absolute bottom-6 right-6 bg-warm-ivory/95 backdrop-blur-sm rounded-card p-6 max-w-sm shadow-warm"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-          >
-            <h3 className="font-headline text-lg font-semibold text-deep-forest mb-3">
-              Getting Here
-            </h3>
-            <ul className="space-y-2 text-body-sm text-on-surface-variant">
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold text-sm" aria-hidden="true">local_airport</span>
-                Nearest Airport: Cochin (COK) — 110 km
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold text-sm" aria-hidden="true">train</span>
-                Nearest Railway: Kottayam — 85 km
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold text-sm" aria-hidden="true">directions_car</span>
-                Private transfers available on request
-              </li>
-            </ul>
-          </motion.div>
         </div>
       </motion.div>
     </section>
