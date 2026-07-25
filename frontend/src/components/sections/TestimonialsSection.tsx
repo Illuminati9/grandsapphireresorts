@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
-import { Star, Quote, BadgeCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight, BadgeCheck, Quote, Star } from "lucide-react";
 
 interface Testimonial {
   id: string;
@@ -11,71 +12,58 @@ interface Testimonial {
   rating: number;
   quote: string;
   image: string;
-  verified: boolean;
-  featured?: boolean;
 }
 
 const testimonials: Testimonial[] = [
   {
-    id: "t1",
+    id: "aditya",
     name: "Aditya Menon",
     location: "Bengaluru, India",
     stayType: "Superior Villa",
     rating: 5,
-    quote:
-      "The moment we arrived, it felt like stepping into another world. The mountain mist, the warm staff, the silence — exactly the reset our family needed. We're already planning our next visit.",
+    quote: "The mountain mist, warm staff, and quiet gave our family the reset we needed.",
     image:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-    verified: true,
-    featured: true,
   },
   {
-    id: "t2",
+    id: "priya",
     name: "Priya Sharma",
     location: "Mumbai, India",
     stayType: "Deluxe Mountain View",
     rating: 5,
-    quote:
-      "Waking up to the Western Ghats from our bedroom window was magical. The staff remembered our anniversary and surprised us with a beautiful setup.",
+    quote: "Waking up to the Western Ghats made our anniversary feel truly unforgettable.",
     image:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face",
-    verified: true,
   },
   {
-    id: "t3",
+    id: "rajesh",
     name: "Rajesh Kumar",
     location: "Chennai, India",
     stayType: "Family Dormitory",
     rating: 5,
-    quote:
-      "Our kids loved the nature trails and campfire evenings. It's rare to find a place where adults can relax while children are equally entertained.",
+    quote: "The children loved the trails and campfires while we had time to properly unwind.",
     image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-    verified: true,
+      "https://images.unsplash.com/photo-1472099645785-5658abf4e?w=200&h=200&fit=crop&crop=face",
   },
   {
-    id: "t4",
+    id: "meera",
     name: "Meera Nair",
     location: "Kochi, India",
     stayType: "Superior Villa",
     rating: 5,
-    quote:
-      "The private villa with its own pool was beyond expectations. Absolute luxury nestled in pristine nature. Grand Sapphire truly understands hospitality.",
+    quote: "Our private villa felt beautifully secluded, with every detail handled thoughtfully.",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
-    verified: true,
   },
   {
-    id: "t5",
+    id: "arjun",
     name: "Arjun Patel",
     location: "Hyderabad, India",
     stayType: "Deluxe Mountain View",
     rating: 4,
-    quote:
-      "Perfect weekend getaway. The food was exceptional — fresh, local ingredients prepared beautifully. The spa treatments were the highlight of our trip.",
+    quote: "The local food and spa were the highlight of a wonderfully easy weekend away.",
     image:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
-    verified: true,
   },
 ];
 
@@ -85,14 +73,21 @@ const stats = [
   { value: "98%", label: "Would Return" },
 ];
 
+function circularDistance(index: number, activeIndex: number, length: number) {
+  let distance = index - activeIndex;
+  if (distance > length / 2) distance -= length;
+  if (distance < -length / 2) distance += length;
+  return distance;
+}
+
 function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="flex gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
+    <div className="flex gap-0.5" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }).map((_, index) => (
         <Star
-          key={i}
-          className={`w-3.5 h-3.5 ${
-            i < rating ? "text-antique-gold fill-antique-gold" : "text-outline-variant"
+          key={index}
+          className={`h-3.5 w-3.5 ${
+            index < rating ? "fill-antique-gold text-antique-gold" : "text-outline-variant"
           }`}
         />
       ))}
@@ -100,177 +95,151 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
 export function TestimonialsSection() {
-  const featured = testimonials.find((t) => t.featured);
-  const rest = testimonials.filter((t) => !t.featured);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
+
+  const changeSlide = (direction: number) => {
+    setActiveIndex((current) => (current + direction + testimonials.length) % testimonials.length);
+  };
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const timer = window.setInterval(() => changeSlide(1), 5500);
+    return () => window.clearInterval(timer);
+  }, [reduceMotion]);
 
   return (
     <section
       id="testimonials"
-      className="py-2xl bg-gradient-to-b from-surface-container-low to-warm-ivory overflow-hidden"
+      className="overflow-hidden bg-gradient-to-b from-surface-container-low to-warm-ivory py-2xl"
       aria-labelledby="testimonials-title"
     >
-      <div className="max-w-content mx-auto px-6">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="text-label-caps font-label text-antique-gold tracking-widest mb-4 block">
-              Guest Stories
-            </span>
-            <h2
-              id="testimonials-title"
-              className="font-headline text-section-title-lg text-deep-forest mb-4"
-            >
-              Cherished Memories
-            </h2>
-            <div className="accent-line mx-auto mb-6" />
-            <p className="section-subtitle mx-auto">
-              Hear from travellers who found their sanctuary with us — and keep coming back.
-            </p>
-          </motion.div>
+      <div className="mx-auto max-w-content px-6">
+        <div className="mb-12 text-center md:mb-16">
+          <span className="mb-4 block font-label text-label-caps tracking-widest text-antique-gold">
+            Guest Stories
+          </span>
+          <h2 id="testimonials-title" className="mb-4 font-headline text-section-title-lg text-deep-forest">
+            Cherished Memories
+          </h2>
+          <div className="accent-line mx-auto mb-6" />
+          <p className="section-subtitle mx-auto">
+            Hear from travellers who found a sanctuary in the hills and keep coming back.
+          </p>
         </div>
 
-        {/* Statistics Strip */}
-        <motion.div
-          className="flex justify-center gap-12 md:gap-20 mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          variants={containerVariants}
-        >
-          {stats.map((stat) => (
-            <motion.div key={stat.label} variants={cardVariants} className="text-center">
-              <p className="font-headline text-4xl md:text-5xl text-deep-forest mb-1">
-                {stat.value}
-              </p>
-              <p className="text-label-caps font-label text-on-surface-variant tracking-widest">
+        <div className="mb-14 grid grid-cols-3 gap-4 md:mb-16 md:gap-10">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              className="text-center"
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="mb-1 font-headline text-3xl text-deep-forest sm:text-4xl md:text-5xl">{stat.value}</p>
+              <p className="font-label text-[10px] tracking-[0.12em] text-on-surface-variant sm:text-label-caps sm:tracking-widest">
                 {stat.label}
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Featured Testimonial */}
-        {featured && (
-          <motion.div
-            className="mb-12"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="relative bg-deep-forest rounded-luxury p-8 md:p-12 text-warm-ivory overflow-hidden">
-              {/* Subtle gradient accent */}
-              <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-antique-gold/5 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-antique-gold/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative mx-auto h-[432px] max-w-5xl sm:h-[456px] md:h-[492px]" role="region" aria-label="Guest testimonials carousel">
+          <div className="absolute inset-0 overflow-hidden" role="list" aria-live="polite">
+            {testimonials.map((testimonial, index) => {
+              const distance = circularDistance(index, activeIndex, testimonials.length);
+              const isActive = distance === 0;
+              const isVisible = Math.abs(distance) <= 2;
 
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-shrink-0">
+              return (
+                <motion.button
+                  key={testimonial.id}
+                  type="button"
+                  className="absolute left-1/2 top-1/2 w-[min(79vw,31rem)] cursor-pointer rounded-luxury border border-antique-gold/20 bg-deep-forest p-7 text-left text-warm-ivory shadow-hero outline-none focus-visible:ring-2 focus-visible:ring-antique-gold focus-visible:ring-offset-4 focus-visible:ring-offset-warm-ivory sm:p-9"
+                  initial={false}
+                  animate={{
+                    x: distance * 245,
+                    y: Math.abs(distance) * 18 - 24,
+                    rotate: distance * 3.2,
+                    scale: isActive ? 1 : 0.9 - Math.max(0, Math.abs(distance) - 1) * 0.05,
+                    opacity: isVisible ? (isActive ? 1 : 0.58) : 0,
+                    zIndex: 10 - Math.abs(distance),
+                  }}
+                  transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 155, damping: 22, mass: 0.9 }}
+                  style={{ translate: "-50% -50%" }}
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`Read testimonial from ${testimonial.name}`}
+                  aria-hidden={!isVisible}
+                  tabIndex={isVisible ? 0 : -1}
+                  role="listitem"
+                >
+                  <div className="absolute inset-0 rounded-luxury bg-gradient-to-br from-antique-gold/10 via-transparent to-transparent" />
                   <div className="relative">
-                    <img
-                      src={featured.image}
-                      alt={featured.name}
-                      className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-2 border-antique-gold/40"
-                    />
-                    {featured.verified && (
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-antique-gold rounded-full flex items-center justify-center">
-                        <BadgeCheck className="w-4 h-4 text-deep-forest" />
+                    <div className="mb-8 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={testimonial.image}
+                          alt=""
+                          className="h-12 w-12 rounded-full border border-antique-gold/50 object-cover"
+                        />
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <p className="font-semibold text-warm-ivory">{testimonial.name}</p>
+                            <BadgeCheck className="h-4 w-4 text-antique-gold" aria-label="Verified guest" />
+                          </div>
+                          <p className="text-xs text-warm-ivory/60">{testimonial.location}</p>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-                <div className="text-center md:text-left flex-1">
-                  <Quote className="w-8 h-8 text-antique-gold/40 mb-3 mx-auto md:mx-0" />
-                  <p className="text-editorial text-warm-ivory/90 mb-6 max-w-2xl">
-                    {featured.quote}
-                  </p>
-                  <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                    <div>
-                      <p className="font-semibold text-warm-ivory">{featured.name}</p>
-                      <p className="text-sm text-warm-ivory/60">{featured.location}</p>
+                      <StarRating rating={testimonial.rating} />
                     </div>
-                    <div className="hidden md:block w-px h-8 bg-warm-ivory/20" />
-                    <div>
-                      <p className="text-xs text-antique-gold font-label tracking-wider">
-                        {featured.stayType}
-                      </p>
-                      <StarRating rating={featured.rating} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
-        {/* Testimonial Grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          variants={containerVariants}
-          role="list"
-          aria-label="Guest testimonials"
-        >
-          {rest.map((testimonial) => (
-            <motion.article
-              key={testimonial.id}
-              variants={cardVariants}
-              className="glass-card rounded-luxury p-6 md:p-8 group"
-              role="listitem"
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="relative flex-shrink-0">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover border border-outline-variant/30"
-                  />
-                  {testimonial.verified && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-antique-gold rounded-full flex items-center justify-center">
-                      <BadgeCheck className="w-3 h-3 text-deep-forest" />
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <p className="font-semibold text-deep-forest text-sm">{testimonial.name}</p>
-                  <p className="text-xs text-on-surface-variant">{testimonial.location}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <StarRating rating={testimonial.rating} />
-                    <span className="text-xs text-antique-gold font-label">
-                      · {testimonial.stayType}
-                    </span>
+                    <Quote className="mb-4 h-8 w-8 text-antique-gold/55" aria-hidden="true" />
+                    <p className="min-h-[5.25rem] font-headline text-2xl leading-tight text-warm-ivory sm:text-[2rem]">
+                      &ldquo;{testimonial.quote}&rdquo;
+                    </p>
+                    <p className="mt-8 font-label text-xs tracking-[0.12em] text-antique-gold">{testimonial.stayType}</p>
                   </div>
-                </div>
-              </div>
-              <p className="text-body-md text-on-surface-variant leading-relaxed">
-                &ldquo;{testimonial.quote}&rdquo;
-              </p>
-            </motion.article>
-          ))}
-        </motion.div>
+                </motion.button>
+              );
+            })}
+          </div>
+
+          <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
+            <button
+              type="button"
+              onClick={() => changeSlide(-1)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-deep-forest/15 bg-warm-ivory text-deep-forest transition hover:border-antique-gold hover:text-antique-gold active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
+              aria-label="Previous testimonial"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <div className="flex gap-2" aria-label={`Showing testimonial ${activeIndex + 1} of ${testimonials.length}`}>
+              {testimonials.map((testimonial, index) => (
+                <button
+                  key={testimonial.id}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold ${
+                    index === activeIndex ? "w-6 bg-antique-gold" : "w-2 bg-deep-forest/25 hover:bg-deep-forest/50"
+                  }`}
+                  aria-label={`Show testimonial ${index + 1}`}
+                  aria-current={index === activeIndex ? "true" : undefined}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => changeSlide(1)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-deep-forest/15 bg-warm-ivory text-deep-forest transition hover:border-antique-gold hover:text-antique-gold active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
+              aria-label="Next testimonial"
+            >
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

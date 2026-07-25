@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { Button } from "@/components/ui";
+import { BookingButton } from "@/components/ui";
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -194,13 +194,12 @@ void main() {
         >
           Unwind in Nature, Live in Luxury
         </h1>
-        <Button
+        <BookingButton
           variant="booking"
-          className="mt-8 shadow-sm hero-cta bg-antique-gold text-deep-forest px-8 py-4 rounded-md font-medium text-lg hover:bg-secondary-fixed transition-colors"
-          size="lg"
+          className="mt-8 shadow-sm hero-cta"
         >
           Book Your Stay
-        </Button>
+        </BookingButton>
       </motion.div>
     </section>
   );
