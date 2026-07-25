@@ -69,7 +69,12 @@ export function ExperiencesSection() {
         </div>
       </div>
 
-      <div className="flex overflow-x-auto gap-md pb-8 hide-scrollbar snap-x experiences-container" role="list" aria-label="Experiences carousel">
+      <div
+        className="flex overflow-x-auto gap-md pb-8 hide-scrollbar snap-x experiences-container"
+        data-lenis-prevent-horizontal
+        role="list"
+        aria-label="Experiences carousel"
+      >
         {experiences.map((experience, index) => (
           <motion.article
             key={experience.id}
