@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Globe } from "lucide-react";
-import { Button } from "@/components/ui";
+import { BookingButton } from "@/components/ui";
 
 const navLinks = [
   { href: "#villas", label: "Villas" },
@@ -83,13 +83,12 @@ export function Navbar() {
               </span>
             </div>
 
-            <Button
-              variant="primary"
-              className="ml-md scale-95 hover:scale-100 duration-200 transition-transform font-medium"
-              size="md"
+            <BookingButton
+              variant="booking"
+              className="ml-md"
             >
               Book Now
-            </Button>
+            </BookingButton>
           </div>
 
           <button
@@ -149,9 +148,9 @@ export function Navbar() {
                 </select>
               </div>
 
-              <Button variant="primary" className="w-full" size="lg">
+              <BookingButton variant="booking" className="w-full">
                 Book Now
-              </Button>
+              </BookingButton>
             </div>
           </nav>
         </div>
