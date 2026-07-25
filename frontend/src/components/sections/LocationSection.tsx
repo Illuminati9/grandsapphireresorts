@@ -9,19 +9,18 @@ export function LocationSection() {
     checkOut: "11:00 AM",
     phone: "+91 123 456 7890",
     email: "reservations@grandsapphireresorts.com",
-    coordinates: "9.8450° N, 76.9838° E",
   };
 
   return (
-    <section id="location" className="py-xl max-w-content mx-auto px-lg location-section" aria-labelledby="location-title">
+    <section id="location" className="mx-auto max-w-content px-lg py-16 lg:py-20 location-section" aria-labelledby="location-title">
       <motion.div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-start"
+        className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div>
+        <div className="max-w-xl">
           <motion.h2
             id="location-title"
             className="section-title text-deep-forest"
@@ -42,14 +41,13 @@ export function LocationSection() {
             Nestled in the serene Western Ghats of Idukki, Kerala — where misty mountains meet warm hospitality.
           </motion.p>
 
-          <div className="mt-10 space-y-6">
+          <div className="mt-10 space-y-5">
             {[
               { icon: "location_on", label: "Address", value: locationInfo.address },
               { icon: "login", label: "Check-in", value: locationInfo.checkIn },
               { icon: "logout", label: "Check-out", value: locationInfo.checkOut },
               { icon: "call", label: "Phone", value: locationInfo.phone, href: `tel:${locationInfo.phone}` },
               { icon: "email", label: "Email", value: locationInfo.email, href: `mailto:${locationInfo.email}` },
-              { icon: "map", label: "Coordinates", value: locationInfo.coordinates },
             ].map((item, index) => (
               <motion.div
                 key={item.label}
@@ -77,8 +75,8 @@ export function LocationSection() {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="aspect-video rounded-hero overflow-hidden shadow-hero bg-surface-container-highest">
+        <div className="relative lg:self-stretch">
+          <div className="aspect-video min-h-[280px] overflow-hidden rounded-hero bg-surface-container-highest shadow-hero lg:h-full lg:min-h-[360px] lg:aspect-auto">
             <iframe
               title="Grand Sapphire Resorts Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.123456789!2d76.9838!3d9.8450!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080b5f3e5e5e5f%3A0x5e5e5e5e5e5e5e5e!2sGrand%20Sapphire%20Resorts!5e0!3m2!1sen!2sin!4v1234567890"
