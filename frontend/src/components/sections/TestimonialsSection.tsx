@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, BadgeCheck, Quote, Star } from "lucide-react";
 
 interface Testimonial {
@@ -68,9 +68,9 @@ const testimonials: Testimonial[] = [
 ];
 
 const stats = [
-  { value: "500+", label: "Happy Guests" },
-  { value: "4.9", label: "Average Rating" },
-  { value: "98%", label: "Would Return" },
+  { value: 500, suffix: "+", label: "Happy Guests" },
+  { value: 4.9, suffix: "", label: "Average Rating" },
+  { value: 98, suffix: "%", label: "Would Return" },
 ];
 
 function circularDistance(index: number, activeIndex: number, length: number) {
@@ -91,6 +91,49 @@ function StarRating({ rating }: { rating: number }) {
           }`}
         />
       ))}
+    </div>
+  );
+}
+
+function StatCounter({ value, suffix, label }: (typeof stats)[number]) {
+  const valueRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(valueRef, { once: true, amount: 0.8 });
+  const reduceMotion = useReducedMotion();
+  const hasDecimal = value % 1 !== 0;
+  const formatValue = useCallback(
+    (current: number) => `${hasDecimal ? current.toFixed(1) : Math.round(current).toLocaleString()}${suffix}`,
+    [hasDecimal, suffix],
+  );
+
+  useEffect(() => {
+    if (!inView || !valueRef.current) return;
+
+    if (reduceMotion) {
+      valueRef.current.textContent = formatValue(value);
+      return;
+    }
+
+    const controls = animate(0, value, {
+      duration: 1.65,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (current) => {
+        if (valueRef.current) valueRef.current.textContent = formatValue(current);
+      },
+    });
+
+    return () => controls.stop();
+  }, [formatValue, inView, reduceMotion, value]);
+
+  return (
+    <div className="text-center" aria-label={`${formatValue(value)} ${label}`}>
+      <p className="mb-1 font-headline text-3xl text-deep-forest sm:text-4xl md:text-5xl">
+        <span ref={valueRef} aria-hidden="true">
+          {formatValue(0)}
+        </span>
+      </p>
+      <p className="font-label text-[10px] tracking-[0.12em] text-on-surface-variant sm:text-label-caps sm:tracking-widest">
+        {label}
+      </p>
     </div>
   );
 }
@@ -133,16 +176,12 @@ export function TestimonialsSection() {
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="text-center"
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
             >
-              <p className="mb-1 font-headline text-3xl text-deep-forest sm:text-4xl md:text-5xl">{stat.value}</p>
-              <p className="font-label text-[10px] tracking-[0.12em] text-on-surface-variant sm:text-label-caps sm:tracking-widest">
-                {stat.label}
-              </p>
+              <StatCounter {...stat} />
             </motion.div>
           ))}
         </div>
