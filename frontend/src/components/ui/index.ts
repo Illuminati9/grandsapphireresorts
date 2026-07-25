@@ -15,3 +15,4 @@ export {
 export { Container, Section, type ContainerProps, type SectionProps } from "./Container";
 export { CylinderCarousel, type CarouselImage, type CylinderCarouselProps } from "./cylinder-carousel";
 export { BookingButton } from "./booking-button";
+export { VelocityMarquee, type VelocityMarqueeProps } from "./velocity-marquee";
