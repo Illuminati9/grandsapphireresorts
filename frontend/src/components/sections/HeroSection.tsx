@@ -7,6 +7,7 @@ import { BookingButton } from "@/components/ui";
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -145,13 +146,16 @@ void main() {
       gl.uniform1f(uTimeLocation, currentTime);
       gl.uniform2f(uResolutionLocation, canvas.width, canvas.height);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
-      requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame(render);
     }
 
     render();
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);
