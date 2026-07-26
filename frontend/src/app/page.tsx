@@ -1,5 +1,3 @@
-"use client";
-
 import { Navbar } from "@/components/layout";
 import { Footer } from "@/components/layout";
 import { HeroSection } from "@/components/sections";
