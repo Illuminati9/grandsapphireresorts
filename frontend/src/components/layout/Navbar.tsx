@@ -48,10 +48,10 @@ export function Navbar() {
         }`}
         role="banner"
       >
-        <nav className="flex justify-between items-center px-lg max-w-content mx-auto" aria-label="Main navigation">
+        <nav className="flex justify-between items-center gap-sm px-md sm:px-lg max-w-content mx-auto" aria-label="Main navigation">
           <Link
             href="/"
-            className={`font-brand text-2xl md:text-3xl font-normal tracking-normal leading-none transition-colors brand-logo ${
+            className={`font-brand text-xl sm:text-2xl md:text-3xl font-normal tracking-normal leading-tight md:leading-none transition-colors brand-logo ${
               isScrolled ? "text-deep-forest" : "text-warm-ivory"
             }`}
             aria-label="Grand Sapphire Resorts - Home"
@@ -93,7 +93,7 @@ export function Navbar() {
 
           <button
             onClick={toggleMobileMenu}
-            className={`md:hidden transition-colors ${
+            className={`md:hidden -mr-2 p-2 transition-colors ${
               isScrolled ? "text-deep-forest" : "text-warm-ivory"
             }`}
             aria-expanded={isMobileMenuOpen}
@@ -103,7 +103,10 @@ export function Navbar() {
             <Menu className="w-8 h-8" aria-hidden="true" />
           </button>
         </nav>
+      </header>
 
+      {/* Outside <header>: the header's backdrop-blur makes it the containing
+          block for fixed children, which squashed this overlay into the bar. */}
         <div
           id="mobile-menu"
           className={`md:hidden fixed inset-0 bg-warm-ivory z-50 flex flex-col items-center justify-center gap-8 transition-opacity duration-300 ${
@@ -148,13 +151,12 @@ export function Navbar() {
                 </select>
               </div>
 
-              <BookingButton variant="booking" className="w-full">
+              <BookingButton variant="booking" className="w-full" onClick={toggleMobileMenu}>
                 Book Now
               </BookingButton>
             </div>
           </nav>
         </div>
-      </header>
 
       <div className="h-20" aria-hidden="true" />
     </>
