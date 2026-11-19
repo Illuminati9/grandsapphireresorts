@@ -1,8 +1,12 @@
 "use client";
 
+import { useMotionPreference } from "@/hooks/useMotionPreference";
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { useCallback, useEffect, useRef, useState } from "react";
-import { animate, motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, BadgeCheck, Quote, Star } from "lucide-react";
+import { animate, motion, useInView } from "framer-motion";
+import { ArrowLeft, ArrowRight, BadgeCheck, Pause, Play, Quote, Star } from "lucide-react";
+import Image from "next/image";
 
 interface Testimonial {
   id: string;
@@ -81,11 +85,13 @@ function circularDistance(index: number, activeIndex: number, length: number) {
 }
 
 function StarRating({ rating }: { rating: number }) {
+  const { t } = useLanguage();
   return (
-    <div className="flex gap-0.5" aria-label={`${rating} out of 5 stars`}>
+    <div className="flex shrink-0 gap-0.5" aria-label={t("{rating} out of 5 stars", { rating })}>
       {Array.from({ length: 5 }).map((_, index) => (
         <Star
           key={index}
+          aria-hidden="true"
           className={`h-3.5 w-3.5 ${
             index < rating ? "fill-antique-gold text-antique-gold" : "text-outline-variant"
           }`}
@@ -96,9 +102,10 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function StatCounter({ value, suffix, label }: (typeof stats)[number]) {
+  const { t } = useLanguage();
   const valueRef = useRef<HTMLSpanElement>(null);
   const inView = useInView(valueRef, { once: true, amount: 0.8 });
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useMotionPreference();
   const hasDecimal = value % 1 !== 0;
   const formatValue = useCallback(
     (current: number) => `${hasDecimal ? current.toFixed(1) : Math.round(current).toLocaleString()}${suffix}`,
@@ -125,32 +132,40 @@ function StatCounter({ value, suffix, label }: (typeof stats)[number]) {
   }, [formatValue, inView, reduceMotion, value]);
 
   return (
-    <div className="text-center" aria-label={`${formatValue(value)} ${label}`}>
+    <div className="text-center" aria-label={`${formatValue(value)} ${t(label)}`}>
       <p className="mb-1 font-headline text-3xl text-deep-forest sm:text-4xl md:text-5xl">
         <span ref={valueRef} aria-hidden="true">
           {formatValue(0)}
         </span>
       </p>
       <p className="font-label text-[10px] tracking-[0.12em] text-on-surface-variant sm:text-label-caps sm:tracking-widest">
-        {label}
+        {t(label)}
       </p>
     </div>
   );
 }
 
+function GuestAvatar({ src, name }: { src: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  return failed ? <span data-testid="guest-avatar-fallback" aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-antique-gold/50 bg-deep-forest font-semibold text-warm-ivory">{name.split(" ").map(part => part[0]).join("")}</span> :
+    <Image src={src} alt="" width={48} height={48} unoptimized onError={() => setFailed(true)} className="h-12 w-12 shrink-0 rounded-full border border-antique-gold/50 object-cover" />;
+}
+
 export function TestimonialsSection() {
+  const { t, locale } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
-  const reduceMotion = useReducedMotion();
+  const [isPaused, setIsPaused] = useState(false);
+  const reduceMotion = useMotionPreference();
 
   const changeSlide = (direction: number) => {
     setActiveIndex((current) => (current + direction + testimonials.length) % testimonials.length);
   };
 
   useEffect(() => {
-    if (reduceMotion) return;
-    const timer = window.setInterval(() => changeSlide(1), 5500);
+    if (reduceMotion || isPaused) return;
+    const timer = window.setInterval(() => { if (!document.hidden) changeSlide(1); }, 5500);
     return () => window.clearInterval(timer);
-  }, [reduceMotion]);
+  }, [reduceMotion, isPaused, activeIndex]);
 
   return (
     <section
@@ -161,14 +176,14 @@ export function TestimonialsSection() {
       <div className="mx-auto max-w-content px-6">
         <div className="mb-12 text-center md:mb-16">
           <span className="mb-4 block font-label text-label-caps tracking-widest text-antique-gold">
-            Guest Stories
+            {t("Guest Stories")}
           </span>
           <h2 id="testimonials-title" className="mb-4 font-headline text-section-title-lg text-deep-forest">
-            Cherished Memories
+            {t("Cherished Memories")}
           </h2>
           <div className="accent-line mx-auto mb-6" />
           <p className="section-subtitle mx-auto">
-            Hear from travellers who found a sanctuary in the hills and keep coming back.
+            {t("Hear from travellers who found a sanctuary in the hills and keep coming back.")}
           </p>
         </div>
 
@@ -186,8 +201,8 @@ export function TestimonialsSection() {
           ))}
         </div>
 
-        <div className="relative mx-auto h-[432px] max-w-5xl sm:h-[456px] md:h-[492px]" role="region" aria-label="Guest testimonials carousel">
-          <div className="absolute inset-0 overflow-hidden" role="list" aria-live="polite">
+        <div className={`relative mx-auto max-w-5xl ${locale === "ml" ? "h-[620px] sm:h-[580px]" : "h-[480px] sm:h-[480px] md:h-[510px]"}`} role="region" aria-label={t("Guest testimonials carousel")}>
+          <div className="absolute inset-0 overflow-hidden" role="group" aria-label={t("Guest Stories")} aria-live={isPaused ? "polite" : "off"}>
             {testimonials.map((testimonial, index) => {
               const distance = circularDistance(index, activeIndex, testimonials.length);
               const isActive = distance === 0;
@@ -210,73 +225,70 @@ export function TestimonialsSection() {
                   transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 155, damping: 22, mass: 0.9 }}
                   style={{ translate: "-50% -50%" }}
                   onClick={() => setActiveIndex(index)}
-                  aria-label={`Read testimonial from ${testimonial.name}`}
-                  aria-hidden={!isVisible}
-                  tabIndex={isVisible ? 0 : -1}
-                  role="listitem"
+                  aria-label={t("Read testimonial from {name}", { name: testimonial.name })}
+                  aria-describedby={`testimonial-${testimonial.id}-quote`}
+                  aria-hidden={!isActive}
+                  tabIndex={isActive ? 0 : -1}
                 >
                   <div className="absolute inset-0 rounded-luxury bg-gradient-to-br from-antique-gold/10 via-transparent to-transparent" />
                   <div className="relative">
-                    <div className="mb-8 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={testimonial.image}
-                          alt=""
-                          className="h-12 w-12 rounded-full border border-antique-gold/50 object-cover"
-                        />
+                    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <GuestAvatar src={testimonial.image} name={testimonial.name} />
                         <div>
                           <div className="flex items-center gap-1.5">
                             <p className="font-semibold text-warm-ivory">{testimonial.name}</p>
-                            <BadgeCheck className="h-4 w-4 text-antique-gold" aria-label="Verified guest" />
+                            <BadgeCheck className="h-4 w-4 text-antique-gold" aria-label={t("Verified guest")} />
                           </div>
-                          <p className="text-xs text-warm-ivory/60">{testimonial.location}</p>
+                          <p className="text-xs text-warm-ivory/60">{t(testimonial.location)}</p>
                         </div>
                       </div>
                       <StarRating rating={testimonial.rating} />
                     </div>
 
                     <Quote className="mb-4 h-8 w-8 text-antique-gold/55" aria-hidden="true" />
-                    <p className="min-h-[5.25rem] font-headline text-2xl leading-tight text-warm-ivory sm:text-[2rem]">
-                      &ldquo;{testimonial.quote}&rdquo;
+                    <p id={`testimonial-${testimonial.id}-quote`} className={`min-h-[5.25rem] text-warm-ivory ${locale === "ml" ? "font-body text-lg leading-relaxed sm:text-xl" : "font-headline text-2xl leading-tight sm:text-[2rem]"}`}>
+                      &ldquo;{t(testimonial.quote)}&rdquo;
                     </p>
-                    <p className="mt-8 font-label text-xs tracking-[0.12em] text-antique-gold">{testimonial.stayType}</p>
+                    <p className="mt-8 font-label text-xs tracking-[0.12em] text-antique-gold">{t(testimonial.stayType)}</p>
                   </div>
                 </motion.button>
               );
             })}
           </div>
 
-          <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
+          <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1 sm:gap-3">
             <button
               type="button"
               onClick={() => changeSlide(-1)}
               className="flex h-11 w-11 items-center justify-center rounded-full border border-deep-forest/15 bg-warm-ivory text-deep-forest transition hover:border-antique-gold hover:text-antique-gold active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
-              aria-label="Previous testimonial"
+              aria-label={t("Previous testimonial")}
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <div className="flex gap-2" aria-label={`Showing testimonial ${activeIndex + 1} of ${testimonials.length}`}>
+            <div className="flex gap-0" aria-label={t("Showing testimonial {current} of {total}", { current: activeIndex + 1, total: testimonials.length })}>
               {testimonials.map((testimonial, index) => (
                 <button
                   key={testimonial.id}
                   type="button"
                   onClick={() => setActiveIndex(index)}
-                  className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold ${
-                    index === activeIndex ? "w-6 bg-antique-gold" : "w-2 bg-deep-forest/25 hover:bg-deep-forest/50"
-                  }`}
-                  aria-label={`Show testimonial ${index + 1}`}
+                  className="flex h-11 w-6 items-center justify-center rounded-full focus-ring sm:w-8"
+                  aria-label={t("Show testimonial {number}", { number: index + 1 })}
                   aria-current={index === activeIndex ? "true" : undefined}
-                />
+                ><span aria-hidden="true" className={`h-2 rounded-full transition-all ${index === activeIndex ? "w-5 bg-antique-gold" : "w-2 bg-deep-forest/25"}`} /></button>
               ))}
             </div>
             <button
               type="button"
               onClick={() => changeSlide(1)}
               className="flex h-11 w-11 items-center justify-center rounded-full border border-deep-forest/15 bg-warm-ivory text-deep-forest transition hover:border-antique-gold hover:text-antique-gold active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
-              aria-label="Next testimonial"
+              aria-label={t("Next testimonial")}
             >
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
+            {!reduceMotion && <button type="button" onClick={() => setIsPaused(current => !current)} aria-label={t(isPaused ? "Play guest stories" : "Pause guest stories")} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-deep-forest/15 text-deep-forest focus-ring">
+              {isPaused ? <Play className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
+            </button>}
           </div>
         </div>
       </div>

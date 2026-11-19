@@ -1,5 +1,7 @@
 "use client";
 
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { motion, type Variants } from "framer-motion";
 import { reservationDetails, resortDetails } from "@/data/reservations";
 import {
@@ -45,10 +47,11 @@ const itemVariants: Variants = {
 };
 
 export function TrustStripSection() {
+  const { t } = useLanguage();
   return (
     <section
       className="bg-gradient-to-b from-warm-ivory to-surface-container-low border-b border-outline-variant/30 py-12 trust-strip-section"
-      aria-label="Trust indicators"
+      aria-label={t("Trust indicators")}
     >
       <div className="max-w-content mx-auto px-6">
 
@@ -72,8 +75,8 @@ export function TrustStripSection() {
                   <Icon className="w-4 h-4 text-antique-gold" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-deep-forest leading-tight">{badge.label}</p>
-                  <p className="text-xs text-on-surface-variant">{badge.sub}</p>
+                  <p className="text-sm font-semibold text-deep-forest leading-tight">{t(badge.label)}</p>
+                  <p className="text-xs text-on-surface-variant">{t(badge.sub)}</p>
                 </div>
               </motion.div>
             );
@@ -83,7 +86,7 @@ export function TrustStripSection() {
         {/* Decorative divider */}
         <div className="decorative-divider">
           <span className="text-xs tracking-widest text-on-surface-variant/60 uppercase font-label whitespace-nowrap">
-            Why choose us
+            {t("Why choose us")}
           </span>
         </div>
 
@@ -107,8 +110,8 @@ export function TrustStripSection() {
                   <Icon className="w-5 h-5 text-antique-gold" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-deep-forest">{item.label}</p>
-                  <p className="text-xs text-on-surface-variant">{item.description}</p>
+                  <p className="text-sm font-semibold text-deep-forest">{t(item.label)}</p>
+                  <p className="text-xs text-on-surface-variant">{t(item.description)}</p>
                 </div>
               </motion.div>
             );
@@ -118,13 +121,13 @@ export function TrustStripSection() {
             variants={itemVariants}
             href={`tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}`}
             className="flex items-center gap-3 bg-deep-forest text-warm-ivory py-3 px-5 rounded-luxury hover:bg-twilight-navy transition-colors duration-300 group"
-            aria-label={`Call ${resortDetails.contactName} for reservations`}
+            aria-label={t("Call {name} for reservations", { name: resortDetails.contactName })}
           >
             <div className="w-8 h-8 rounded-full bg-antique-gold/20 flex items-center justify-center flex-shrink-0 group-hover:bg-antique-gold/30 transition-colors duration-300">
               <Phone className="w-4 h-4 text-amber-glow" />
             </div>
             <div>
-              <p className="text-xs text-warm-ivory/70 font-label">Call {resortDetails.contactName}</p>
+              <p className="text-xs text-warm-ivory/70 font-label">{t("Call {name}", { name: resortDetails.contactName })}</p>
               <p className="text-sm font-semibold text-warm-ivory">{reservationDetails.phone}</p>
             </div>
           </motion.a>}

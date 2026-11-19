@@ -114,8 +114,8 @@ test("placeholder reservation details are not published", async ({ page }) => {
   await expect(page.getByText("+91 123 456 7890", { exact: true })).toHaveCount(0);
   await expect(page.locator('a[href="mailto:reservations@grandsapphireresorts.com"]')).toHaveCount(0);
   await expect(page.locator('iframe[src*="1234567890"]')).toHaveCount(0);
-  await expect(page.locator('a[href="tel:+918547639769"]')).toHaveCount(2);
-  await expect(page.getByRole("link", { name: "Get directions on Google Maps" })).toHaveAttribute("href", "https://maps.app.goo.gl/uHHDWyV2Fk9UeRKv8");
+  await expect(page.locator('a[href="tel:+918547639769"]')).toHaveCount(3);
+  await expect(page.locator("#location").getByRole("link", { name: "Get directions on Google Maps" })).toHaveAttribute("href", "https://maps.app.goo.gl/uHHDWyV2Fk9UeRKv8");
   await expect(page.getByTitle("Grand Sapphire Resorts Location")).toHaveAttribute("src", /q=9\.8404195%2C77\.0652606/);
   for (const link of await page.locator('a[aria-label^="Reserve "]').all()) {
     await expect(link).toHaveAttribute("href", "https://www.booking.com/hotel/in/grandsaphireresorts.html");

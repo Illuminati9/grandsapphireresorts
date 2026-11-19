@@ -1,14 +1,19 @@
 "use client";
 
+import { useMotionPreference } from "@/hooks/useMotionPreference";
+import { ResortImage } from "@/components/ui/ResortImage";
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { BookingButton } from "@/components/ui";
 
 export function HeroSection() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useMotionPreference();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -52,7 +57,6 @@ export function HeroSection() {
       canvas.height = window.innerHeight;
       gl.viewport(0, 0, canvas.width, canvas.height);
     }
-    window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
     const vertexShaderSource = `
@@ -108,10 +112,14 @@ void main() {
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-    if (!vertexShader || !fragmentShader) return;
+    if (!vertexShader || !fragmentShader) {
+      if (vertexShader) gl.deleteShader(vertexShader);
+      if (fragmentShader) gl.deleteShader(fragmentShader);
+      return;
+    }
 
     const program = gl.createProgram();
-    if (!program) return;
+    if (!program) { gl.deleteShader(vertexShader); gl.deleteShader(fragmentShader); return; }
 
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
@@ -119,12 +127,22 @@ void main() {
 
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.error("Program link error:", gl.getProgramInfoLog(program));
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
       return;
     }
 
     gl.useProgram(program);
 
     const positionBuffer = gl.createBuffer();
+    if (!positionBuffer) {
+      gl.useProgram(null);
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      return;
+    }
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     const positions = new Float32Array([
       -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1,
@@ -139,9 +157,15 @@ void main() {
     const uResolutionLocation = gl.getUniformLocation(program, "u_resolution");
 
     const startTime = Date.now();
+    let isInView = true;
+
+    function stopRendering() {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
 
     function render() {
-      if (!canvas || !gl) return;
+      if (!canvas || !gl || !isInView || document.hidden) { rafRef.current = null; return; }
       const currentTime = (Date.now() - startTime) / 1000;
       gl.uniform1f(uTimeLocation, currentTime);
       gl.uniform2f(uResolutionLocation, canvas.width, canvas.height);
@@ -149,19 +173,31 @@ void main() {
       rafRef.current = requestAnimationFrame(render);
     }
 
+    const resumeRendering = () => {
+      if (isInView && !document.hidden && rafRef.current === null) render();
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      isInView = entry.isIntersecting;
+      if (isInView) resumeRendering(); else stopRendering();
+    });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    const onVisibility = () => { if (document.hidden) stopRendering(); else resumeRendering(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("resize", resizeCanvas);
     render();
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      document.removeEventListener("visibilitychange", onVisibility);
+      observer.disconnect();
+      stopRendering();
+      gl.useProgram(null);
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);
       gl.deleteBuffer(positionBuffer);
     };
-  }, []);
+  }, [shouldReduceMotion]);
 
   return (
     <section
@@ -180,9 +216,10 @@ void main() {
         className="absolute inset-0 z-0 will-change-transform"
         style={{ y: imageY, scale: imageScale }}
       >
-        <img
+        <ResortImage
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhg66ONDmAgn_Edn-CJhUsTTHf5ys_5umEJTksrPgE6gDW5B98Ajea_iAQE9BcIG5qW4rI1LnJhCCqNUVKjCa9Sswy9dAgRDwsg47nZLOrbcK2EKDOnjgxGLeDgoQgQMbNC4WkCxk8cMqgmnMYZKqATFAFeGkB3mtDrTs18JVrMy5-oMm73j_NIEcY4kBrRs_Th683kT6FbLoY3AcczopBpXDw3qRL0oPMR84IETxzwMdQlpEsZ4C41pGilbPj7GbIzIjpacBwjc"
-          alt="Grand Sapphire Resort at twilight"
+          alt={t("Grand Sapphire Resort at twilight")}
+          fill sizes="100vw" preload fallbackSrc="/images/resort/hangout_area_outside.jpeg"
           className="w-full h-full object-cover hero-bg opacity-70 mix-blend-overlay"
         />
         <div className="absolute inset-0 bg-twilight-navy/30 hero-overlay" />
@@ -194,15 +231,15 @@ void main() {
       >
         <h1
           id="hero-title"
-          className="font-headline text-headline-lg-mobile md:text-headline-lg text-warm-ivory mb-6 max-w-4xl drop-shadow-lg hero-headline"
+          className="font-headline text-hero-mobile md:text-hero-desktop text-warm-ivory mb-6 max-w-4xl drop-shadow-lg hero-headline"
         >
-          Unwind in Nature, Live in Luxury
+          {t("Unwind in Nature, Live in Luxury")}
         </h1>
         <BookingButton
           variant="booking"
           className="mt-8 shadow-sm hero-cta"
         >
-          Book Your Stay
+          {t("Book Your Stay")}
         </BookingButton>
       </motion.div>
     </section>

@@ -29,6 +29,16 @@ To override a confirmed destination, copy `.env.example` to `.env.local` or set 
 
 `npm run check:deployment` validates HTTPS destinations, phone/email formatting, Google embed origins, and the presence of a reservation channel. It rejects the previous placeholder phone number. It does not test third-party availability or make a reservation.
 
+## Language and accessibility
+
+The EN/ML buttons and mobile language selector translate the complete home page using the matching message dictionaries in `src/i18n/`. The selected language persists in local storage and syncs across tabs; it remains usable for the current page when storage is blocked. `LanguageProvider` updates the document language, title, and description after hydration. The static HTML and social sharing metadata default to English; separate locale URLs are not configured.
+
+Malayalam uses a self-hosted Next.js font. Translation keys and interpolation placeholders are checked by the regression suite. Keep both JSON dictionaries in sync when editing copy. Proper names, the resort brand, phone numbers, and prices remain unchanged.
+
+The mobile menu and gallery viewer use native modal dialogs with keyboard access, Escape dismissal, focus restoration, and background scroll locking. A skip link reaches the main content. A measured header offset keeps section links clear of the fixed header through both native and Lenis scrolling. Reduced-motion settings disable automatic stories, decorative shine, parallax, and WebGL animation. The motion preference has a stable server snapshot to avoid hydration mismatches, and changing it preserves the selected gallery image.
+
+External resort photos fall back to a local resort image if unavailable; guest portraits fall back to initials. Section icons use bundled SVGs rather than an external icon font. Dining descriptions and experience controls are available on touch screens.
+
 ## Validation
 
 ```sh
@@ -41,9 +51,9 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The browser suite serves the production build on port 3100 and checks phone/tablet/desktop navigation, modal keyboard behavior, short-screen scrolling, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted.
+The 50-check suite serves the production build on port 3100. It covers English and Malayalam at seven widths (320–1440px), language persistence and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public home page, not unused component exports or third-party booking internals.
 
-GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and Google font fetching require network access. The existing five image/font lint warnings remain non-fatal.
+GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and build-time Google font fetching require network access. Lint passes without warnings. The unused gradient text utility flagged by the design check was removed; no design-check suppressions were added.
 
 ## Deployment
 
