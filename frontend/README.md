@@ -64,7 +64,7 @@ The upgrade replaces `next lint` with the ESLint CLI and flat configuration. Nex
 
 ## Netlify and search setup
 
-The root `netlify.toml` sets the base directory to `frontend`, the Node major to 24, the publish directory to `.next`, and the checked build command. Keep Netlify's maintained Next.js adapter enabled. `NETLIFY_NEXT_SKEW_PROTECTION` applies to Git-connected cloud deployments; the adapter currently excludes CLI deployments from that feature.
+The root `netlify.toml` sets the base directory to `frontend`, the Node major to 24, the publish directory to `.next`, and the checked build command. The config explicitly enables Netlify's maintained Next.js adapter for CLI and cloud builds without pinning its version. `NETLIFY_NEXT_SKEW_PROTECTION` applies to Git-connected cloud deployments; the adapter currently excludes CLI deployments from that feature.
 
 `SITE_URL` selects the preferred public HTTPS origin. Leave it blank to use Netlify's assigned `URL`, or set it to a custom domain after registration and DNS configuration. The canonical URL, sitemap, Open Graph metadata, and resort structured data use this same origin. Production builds fail if their public origin is absent or invalid. Local and preview builds are marked `noindex` and disallow crawling; the production context allows indexing. Rebuild after changing the preferred domain.
 
