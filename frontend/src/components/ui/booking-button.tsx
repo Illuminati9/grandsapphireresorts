@@ -1,27 +1,29 @@
 "use client";
 
 import React from "react";
-import { motion, type MotionProps } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { bookingHref, bookingLinkProps } from "@/data/booking";
 
-type BookingButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  MotionProps & {
-    children?: React.ReactNode;
-    variant?: "primary" | "booking" | "secondary" | "ghost";
-  };
+type BookingButtonProps = Omit<HTMLMotionProps<"a">, "children"> & {
+  children?: React.ReactNode;
+  variant?: "primary" | "booking" | "secondary" | "ghost";
+};
 
 /**
- * BookingButton - Grand Sapphire Resorts styled CTA with Vengeance UI shine effect
+ * BookingButton - Grand Sapphire Resorts styled CTA with Vengeance UI shine effect.
+ * Renders a link: by default to the booking page in src/data/booking.ts.
  * Uses design tokens from DESIGN.md:
  * - Primary: near-black green (#00190F) fill, warm ivory text, antique gold hover border
  * - Booking CTA: same as primary + antique gold hover border + scale(1.02)
  * - Secondary: transparent, deep forest text, antique gold border
  * - Ghost: transparent, antique gold text, underline on hover
  */
-export const BookingButton = React.forwardRef<HTMLButtonElement, BookingButtonProps>(
+export const BookingButton = React.forwardRef<HTMLAnchorElement, BookingButtonProps>(
   (
     {
       children = "Book Your Stay",
+      href = bookingHref(),
       className = "",
       variant = "booking",
       whileTap = { scale: 0.97 },
@@ -42,7 +44,7 @@ export const BookingButton = React.forwardRef<HTMLButtonElement, BookingButtonPr
       booking: cn(
         "group inline-flex items-center justify-center gap-2 px-8 py-3 rounded-button min-h-[48px] relative overflow-hidden",
         "bg-primary text-on-primary font-label text-label-caps transition-all duration-normal",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold focus-visible:ring_offset-2 focus-visible:ring-offset-warm-ivory",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold focus-visible:ring-offset-2 focus-visible:ring-offset-warm-ivory",
         "disabled:pointer-events-none disabled:opacity-50",
         "[--shine:rgba(255,255,255,0.4)]",
         "hover:border-antique-gold hover:scale-[1.02]",
@@ -67,8 +69,9 @@ export const BookingButton = React.forwardRef<HTMLButtonElement, BookingButtonPr
     };
 
     return (
-      <motion.button
+      <motion.a
         ref={ref}
+        {...bookingLinkProps(href)}
         {...rest}
         whileHover={{ scale: variant === "booking" ? 1.02 : 1.01 }}
         whileTap={whileTap}
@@ -118,7 +121,7 @@ export const BookingButton = React.forwardRef<HTMLButtonElement, BookingButtonPr
             repeatDelay: 1,
           }}
         />
-      </motion.button>
+      </motion.a>
     );
   }
 );

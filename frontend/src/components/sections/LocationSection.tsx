@@ -60,10 +60,10 @@ export function LocationSection() {
                 <span className="material-symbols-outlined text-antique-gold text-xl mt-1 flex-shrink-0" aria-hidden="true">
                   {item.icon}
                 </span>
-                <div>
+                <div className="min-w-0">
                   <p className="text-on-surface-variant/60 text-body-sm">{item.label}</p>
                   {item.href ? (
-                    <a href={item.href} className="text-deep-forest hover:text-antique-gold transition-colors text-body-md">
+                    <a href={item.href} className="break-words text-deep-forest hover:text-antique-gold transition-colors text-body-md">
                       {item.value}
                     </a>
                   ) : (
@@ -76,7 +76,9 @@ export function LocationSection() {
         </div>
 
         <div className="relative lg:self-stretch">
-          <div className="aspect-video min-h-[280px] overflow-hidden rounded-hero bg-surface-container-highest shadow-hero lg:h-full lg:min-h-[360px] lg:aspect-auto">
+          {/* Fixed height below lg: aspect-video + min-height made the box wider
+              than a phone screen and pushed the whole page sideways. */}
+          <div className="h-[300px] w-full overflow-hidden rounded-hero bg-surface-container-highest shadow-hero lg:h-full lg:min-h-[360px]">
             <iframe
               title="Grand Sapphire Resorts Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.123456789!2d76.9838!3d9.8450!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080b5f3e5e5e5f%3A0x5e5e5e5e5e5e5e5e!2sGrand%20Sapphire%20Resorts!5e0!3m2!1sen!2sin!4v1234567890"

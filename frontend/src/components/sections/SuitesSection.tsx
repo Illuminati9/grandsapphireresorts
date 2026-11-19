@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CardImage, CardContent, CardTitle, CardDescription, CardPrice, CardAction } from "@/components/ui";
+import { CardImage, CardContent, CardTitle, CardDescription, CardPrice } from "@/components/ui";
+import { bookingHref, bookingLinkProps } from "@/data/booking";
 
 const suites = [
   {
@@ -35,11 +36,13 @@ const suites = [
 
 export function SuitesSection() {
   return (
-    <section id="villas" className="py-xl max-w-max-width mx-auto px-lg accommodations-section" aria-labelledby="suites-title">
+    <section id="villas" className="py-xl max-w-max-width mx-auto px-md sm:px-lg accommodations-section" aria-labelledby="suites-title">
       <div className="mb-12 text-center md:text-left">
+        {/* "Accommodations" is one long word: at 36px it is wider than a
+            320-360px phone, so it steps down below sm. */}
         <motion.h2
           id="suites-title"
-          className="font-headline text-headline-md text-deep-forest mb-4"
+          className="section-title text-[1.875rem] sm:text-section-title text-deep-forest mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -93,12 +96,13 @@ export function SuitesSection() {
                     {suite.price} <span className="text-sm font-normal">{suite.period}</span>
                   </CardPrice>
                 </div>
-                <CardAction
-                  variant="secondary"
-                  className="bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold"
+                <a
+                  {...bookingLinkProps(bookingHref(suite.id))}
+                  aria-label={`Reserve ${suite.name}`}
+                  className="btn-secondary bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold"
                 >
                   Reserve
-                </CardAction>
+                </a>
               </div>
             </CardContent>
           </motion.article>
