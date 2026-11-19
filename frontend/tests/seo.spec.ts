@@ -4,6 +4,7 @@ import { siteDetails } from "../src/data/site";
 import ml from "../src/i18n/ml.json" with { type: "json" };
 import { localeFromSegments } from "../src/i18n/routing";
 import { pageMetadata } from "../src/lib/seo";
+import { faqItems } from "../src/data/faq";
 
 test("locale routing accepts exactly the two published languages", () => {
   expect(localeFromSegments()).toBe("en");
@@ -137,4 +138,44 @@ test("sharing image is a generated 1200 by 630 PNG", async ({ request }) => {
   const bytes = await image.body();
   expect(bytes.readUInt32BE(16)).toBe(1200);
   expect(bytes.readUInt32BE(20)).toBe(630);
+});
+
+test("sitemap lists both languages with reciprocal hreflang and a last-modified date", async ({ request }) => {
+  const config = readSiteConfig();
+  test.skip(!config.indexable, "sitemap is empty for non-indexable builds");
+  const xml = await (await request.get("/sitemap.xml")).text();
+  expect(xml).toContain(`<lastmod>${siteDetails.lastModified}</lastmod>`);
+  for (const [language, suffix] of [["en", "/"], ["ml", "/ml"], ["x-default", "/"]]) {
+    expect(xml).toContain(`hreflang="${language}" href="${config.origin}${suffix}"`);
+  }
+});
+
+for (const { locale, path } of [{ locale: "en", path: "/" }, { locale: "ml", path: "/ml" }] as const) {
+  test(`${locale} FAQ is visible without JavaScript and matches its FAQPage data`, async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto(`http://127.0.0.1:3100${path}`);
+    const items = faqItems(locale);
+    expect(items.length).toBeGreaterThanOrEqual(3);
+    for (const item of items) {
+      await expect(page.locator("#faq h3", { hasText: item.question })).toBeVisible();
+      await expect(page.locator("#faq p", { hasText: item.answer })).toBeVisible();
+    }
+    const entities = (await page.locator('script[type="application/ld+json"]').allTextContents()).map(text => JSON.parse(text));
+    const faq = entities.find(entity => entity["@type"] === "FAQPage");
+    expect(faq.mainEntity.map((question: { name: string }) => question.name)).toEqual(items.map(item => item.question));
+    const business = entities.find(entity => entity["@type"] === "Resort");
+    expect(business.sameAs).toContain(siteDetails.googlePlaceUrl);
+    await context.close();
+  });
+}
+
+test("llms.txt summarises confirmed facts in plain text", async ({ request }) => {
+  const response = await request.get("/llms.txt");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/plain");
+  const text = await response.text();
+  expect(text).toContain("# Grand Sapphire Resorts");
+  expect(text).toContain("+91 85476 39769");
+  expect(text).toContain(`${readSiteConfig().origin}/ml`);
 });

@@ -6,3 +6,4 @@ export { ExperiencesSection } from "./ExperiencesSection";
 export { LocationSection } from "./LocationSection";
 export { ResortShowcaseSection } from "./ResortShowcaseSection";
 export { TestimonialsSection } from "./TestimonialsSection";
+export { FaqSection } from "./FaqSection";
