@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { MotionConfig } from "framer-motion";
 import { translate, type Locale } from "@/i18n/messages";
+import { siteDetails } from "@/data/site";
 
 const STORAGE_KEY = "grand-sapphire-language";
 const CHANGE_EVENT = "grand-sapphire-language-change";
@@ -48,8 +49,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.title = translate(locale, "Grand Sapphire Resorts | Twilight in the Hills");
-    document.querySelector('meta[name="description"]')?.setAttribute("content", translate(locale, "A quiet-luxury private-villa resort in the Western Ghats of Idukki, Kerala. Where twilight meets tranquility."));
+    document.title = translate(locale, siteDetails.title);
+    document.querySelector('meta[name="description"]')?.setAttribute("content", translate(locale, siteDetails.description));
   }, [locale]);
 
   return <LanguageContext.Provider value={value}>

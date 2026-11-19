@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, Noto_Sans_Malayalam } from "next/font/google";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { LanguageProvider } from "@/components/layout/LanguageProvider";
+import { siteDetails } from "@/data/site";
+import { readSiteConfig } from "@/lib/site-config";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,26 +23,29 @@ const cormorantGaramond = Cormorant_Garamond({
 const malayalam = Noto_Sans_Malayalam({ subsets: ["malayalam"], variable: "--font-malayalam", display: "swap", weight: "variable", preload: false });
 
 export const metadata: Metadata = {
-  title: "Grand Sapphire Resorts | Twilight in the Hills",
-  description: "A quiet-luxury private-villa resort in the Western Ghats of Idukki, Kerala. Where twilight meets tranquility.",
-  keywords: ["resort", "luxury", "villa", "Idukki", "Kerala", "Western Ghats", "mountain resort", "boutique hotel"],
+  metadataBase: new URL(readSiteConfig().origin),
+  title: siteDetails.title,
+  description: siteDetails.description,
+  alternates: { canonical: "/" },
   authors: [{ name: "Grand Sapphire Resorts" }],
   creator: "Grand Sapphire Resorts",
   publisher: "Grand Sapphire Resorts",
   formatDetection: { telephone: true },
   openGraph: {
-    title: "Grand Sapphire Resorts | Twilight in the Hills",
-    description: "A quiet-luxury private-villa resort in the Western Ghats of Idukki, Kerala.",
+    title: siteDetails.title,
+    description: siteDetails.description,
+    url: "/",
     type: "website",
     locale: "en_IN",
     siteName: "Grand Sapphire Resorts",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Grand Sapphire Resorts | Twilight in the Hills",
-    description: "A quiet-luxury private-villa resort in the Western Ghats of Idukki, Kerala.",
+    title: siteDetails.title,
+    description: siteDetails.description,
   },
-  robots: { index: true, follow: true },
+  robots: { index: readSiteConfig().indexable, follow: true },
+  verification: { google: readSiteConfig().googleVerification },
 };
 
 export default function RootLayout({

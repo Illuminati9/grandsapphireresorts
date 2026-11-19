@@ -51,7 +51,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The 50-check suite serves the production build on port 3100. It covers English and Malayalam at seven widths (320–1440px), language persistence and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public home page, not unused component exports or third-party booking internals.
+The 62-check suite serves the production build on port 3100. It covers English and Malayalam at seven widths (320–1440px), language persistence and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public home page, not unused component exports or third-party booking internals.
 
 GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and build-time Google font fetching require network access. Lint passes without warnings. The unused gradient text utility flagged by the design check was removed. The detector has one file-and-value-scoped exception for the pre-existing, unused `--transition-spring` token in `globals.css`; it has no consumers in the page, and the bounce-easing rule stays active elsewhere.
 
@@ -60,3 +60,16 @@ GitHub Actions runs these checks on pull requests and pushes to `main`, using No
 Set the deployment project root to `frontend/`, use Node 24+, and run `npm ci` followed by `npm run check:deployment && npm run lint && npm run build`. Use `npm run start` for a Node server or the platform's Next.js adapter. This repository is not configured as a plain static export.
 
 The upgrade replaces `next lint` with the ESLint CLI and flat configuration. Next.js 16 builds validate types but do not invoke lint, so keep the explicit lint step in the deployment pipeline. No deployment is performed by this PR's validation workflow.
+
+
+## Netlify and search setup
+
+The root `netlify.toml` sets the base directory to `frontend`, the Node major to 24, the publish directory to `.next`, and the checked build command. The config explicitly enables Netlify's maintained Next.js adapter for CLI and cloud builds without pinning its version. `NETLIFY_NEXT_SKEW_PROTECTION` applies to Git-connected cloud deployments; the adapter currently excludes CLI deployments from that feature.
+
+`SITE_URL` selects the preferred public HTTPS origin. Leave it blank to use Netlify's assigned `URL`, or set it to a custom domain after registration and DNS configuration. The canonical URL, sitemap, Open Graph metadata, and resort structured data use this same origin. Production builds fail if their public origin is absent or invalid. Local and preview builds are marked `noindex` and disallow crawling; the production context allows indexing. Rebuild after changing the preferred domain.
+
+The home page includes server-rendered resort JSON-LD using confirmed address, telephone, map marker, and reservation destination. It deliberately excludes ratings, review stars, awards, certifications, and room-price offers. Social previews use a generated 1200×630 image from an existing local property photo, and the site has its own mountain favicon. `GOOGLE_SITE_VERIFICATION` accepts a real Search Console verification token; no token is supplied by default.
+
+CI builds with the reserved fixture origin `https://resort.example` to check the production SEO path. Netlify uses its own environment and never takes that value from the GitHub workflow. To repeat that check locally, build and test with `SITE_URL=https://resort.example CONTEXT=production` set on both commands. Never set that fixture URL on the hosting project.
+
+The EN/ML selector remains a client preference at one URL. Separate crawlable Malayalam URLs and hreflang are not implemented; the sitemap does not advertise nonexistent language routes. See [LAUNCH.md](LAUNCH.md) for domain migration, Google ownership steps, and remaining content evidence.
