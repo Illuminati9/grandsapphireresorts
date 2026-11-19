@@ -8,10 +8,12 @@ import { ExperiencesSection } from "@/components/sections";
 import { LocationSection } from "@/components/sections";
 import { ResortShowcaseSection } from "@/components/sections";
 import { TestimonialsSection } from "@/components/sections";
+import { ResortStructuredData } from "@/components/ResortStructuredData";
 
 export default function Home() {
   return (
     <>
+      <ResortStructuredData />
       <Navbar />
       <main id="main-content" tabIndex={-1}>
         <HeroSection />

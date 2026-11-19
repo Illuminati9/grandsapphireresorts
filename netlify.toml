@@ -1,0 +1,8 @@
+[build]
+  base = "frontend"
+  command = "npm run check:deployment && npm run lint && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+  NETLIFY_NEXT_SKEW_PROTECTION = "true"

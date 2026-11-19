@@ -15,6 +15,9 @@ concurrency:
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://resort.example
+      CONTEXT: production
     timeout-minutes: 15
     defaults:
       run:
