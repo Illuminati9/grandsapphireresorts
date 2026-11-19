@@ -31,7 +31,7 @@ To override a confirmed destination, copy `.env.example` to `.env.local` or set 
 
 ## Language and accessibility
 
-The EN/ML buttons and mobile language selector translate the complete home page using the matching message dictionaries in `src/i18n/`. The selected language persists in local storage and syncs across tabs; it remains usable for the current page when storage is blocked. `LanguageProvider` updates the document language, title, and description after hydration. The static HTML and social sharing metadata default to English; separate locale URLs are not configured.
+English is served at `/` and Malayalam at `/ml`, using the matching message dictionaries in `src/i18n/`. Both pages are prerendered with their language, title, description and content already present before JavaScript. Desktop and mobile language links navigate between those URLs. The URL determines the language, including on reload, in new tabs and with storage blocked; older local-storage preferences cannot override it.
 
 Malayalam uses a self-hosted Next.js font. Translation keys and interpolation placeholders are checked by the regression suite. Keep both JSON dictionaries in sync when editing copy. Proper names, the resort brand, phone numbers, and prices remain unchanged.
 
@@ -51,7 +51,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The 62-check suite serves the production build on port 3100. It covers English and Malayalam at seven widths (320–1440px), language persistence and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public home page, not unused component exports or third-party booking internals.
+The regression suite serves the production build on port 3100. It covers both language URLs and metadata without JavaScript, English and Malayalam at seven widths (320–1440px), history/new-tab navigation and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public pages, not unused component exports or third-party booking internals.
 
 GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and build-time Google font fetching require network access. Lint passes without warnings. The unused gradient text utility flagged by the design check was removed. The detector has one file-and-value-scoped exception for the pre-existing, unused `--transition-spring` token in `globals.css`; it has no consumers in the page, and the bounce-easing rule stays active elsewhere.
 
@@ -72,4 +72,4 @@ The home page includes server-rendered resort JSON-LD using confirmed address, t
 
 CI builds with the reserved fixture origin `https://resort.example` to check the production SEO path. Netlify uses its own environment and never takes that value from the GitHub workflow. To repeat that check locally, build and test with `SITE_URL=https://resort.example CONTEXT=production` set on both commands. Never set that fixture URL on the hosting project.
 
-The EN/ML selector remains a client preference at one URL. Separate crawlable Malayalam URLs and hreflang are not implemented; the sitemap does not advertise nonexistent language routes. See [LAUNCH.md](LAUNCH.md) for domain migration, Google ownership steps, and remaining content evidence.
+Each language page has a self-canonical, reciprocal `en`/`ml` alternatives, localized metadata and a shared resort identity. The production sitemap lists `/` and `/ml`; previews remain non-indexable. See [LAUNCH.md](LAUNCH.md) for domain migration, Google ownership steps, and remaining content evidence.

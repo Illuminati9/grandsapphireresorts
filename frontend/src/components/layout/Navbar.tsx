@@ -6,13 +6,14 @@ import { Menu, X, Globe } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { BookingButton } from "@/components/ui";
 import { useLanguage } from "./LanguageProvider";
+import { localePaths } from "@/i18n/routing";
 
 const navLinks = [
   { href: "#villas", label: "Villas" },
   { href: "#facilities", label: "Facilities" },
   { href: "#experiences", label: "Experiences" },
   { href: "#location", label: "Location" },
-];
+] as const;
 
 const languages = [
   { code: "en", name: "English" },
@@ -38,7 +39,7 @@ function containMenuFocus(event: KeyboardEvent<HTMLDialogElement>) {
 }
 
 export function Navbar() {
-  const { locale, setLocale, t } = useLanguage();
+  const { locale, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -117,7 +118,7 @@ export function Navbar() {
       >
         <nav className="flex justify-between items-center gap-sm px-md sm:px-lg max-w-content mx-auto" aria-label={t("Main navigation")}>
           <Link
-            href="/"
+            href={localePaths[locale]}
             className={`font-brand text-xl sm:text-2xl xl:text-3xl xl:shrink-0 font-normal tracking-normal leading-tight xl:leading-none transition-colors brand-logo ${
               isScrolled ? "text-deep-forest" : "text-warm-ivory"
             }`}
@@ -142,12 +143,12 @@ export function Navbar() {
             <div className={`flex items-center gap-sm ml-md border-l pl-md ${
               isScrolled ? "border-deep-forest/30" : "border-warm-ivory/30"
             }`}>
-              <button type="button" onClick={() => setLocale("en")} aria-label={t("Switch to English")} aria-pressed={locale === "en"} className={`min-h-11 min-w-11 font-medium text-sm focus-ring ${isScrolled ? "text-deep-forest" : "text-warm-ivory"}`}>
+              <Link href="/" prefetch={false} hrefLang="en" aria-label={t("Switch to English")} aria-current={locale === "en" ? "page" : undefined} className={`inline-flex min-h-11 min-w-11 items-center justify-center font-medium text-sm focus-ring ${isScrolled ? "text-deep-forest" : "text-warm-ivory"}`}>
                 EN
-              </button>
-              <button type="button" onClick={() => setLocale("ml")} aria-label={t("Switch to Malayalam")} aria-pressed={locale === "ml"} className={`min-h-11 min-w-11 font-medium text-sm focus-ring ${isScrolled ? "text-deep-forest" : "text-warm-ivory"}`}>
+              </Link>
+              <Link href="/ml" prefetch={false} hrefLang="ml" aria-label={t("Switch to Malayalam")} aria-current={locale === "ml" ? "page" : undefined} className={`inline-flex min-h-11 min-w-11 items-center justify-center font-medium text-sm focus-ring ${isScrolled ? "text-deep-forest" : "text-warm-ivory"}`}>
                 ML
-              </button>
+              </Link>
             </div>
 
             <BookingButton
@@ -207,18 +208,14 @@ export function Navbar() {
             <div className="flex flex-col items-center gap-4 pt-4 border-t border-outline-variant w-full max-w-xs">
               <div className="flex items-center gap-4">
                 <Globe className="w-5 h-5 text-antique-gold" aria-hidden="true" />
-                <select
-                  className="label-caps min-h-11 rounded-input px-3 text-deep-forest bg-transparent border border-outline-variant cursor-pointer focus-ring"
-                  aria-label={t("Select language")}
-                  value={locale}
-                  onChange={(event) => setLocale(event.target.value === "ml" ? "ml" : "en")}
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
+                {languages.map((language) => (
+                  <Link key={language.code} href={language.code === "ml" ? "/ml" : "/"} prefetch={false}
+                    hrefLang={language.code}
+                    aria-label={t(language.code === "ml" ? "Switch to Malayalam" : "Switch to English")}
+                    aria-current={locale === language.code ? "page" : undefined}
+                    className="inline-flex min-h-11 items-center rounded-input border border-outline-variant px-3 text-deep-forest focus-ring"
+                  >{language.name}</Link>
+                ))}
               </div>
 
               <BookingButton variant="booking" className="w-full" onClick={closeMobileMenu}>

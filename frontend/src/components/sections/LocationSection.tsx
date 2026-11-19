@@ -12,7 +12,7 @@ export function LocationSection() {
     <section id="location" className="mx-auto max-w-content px-md sm:px-lg py-16 lg:py-20 location-section" aria-labelledby="location-title">
       <motion.div
         className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16"
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -21,7 +21,7 @@ export function LocationSection() {
           <motion.h2
             id="location-title"
             className="section-title text-deep-forest"
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -30,7 +30,7 @@ export function LocationSection() {
           </motion.h2>
           <motion.p
             className="section-subtitle mt-4 text-on-surface-variant"
-            initial={{ opacity: 0, y: 15 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
@@ -49,14 +49,14 @@ export function LocationSection() {
               <motion.div
                 key={item.label}
                 className="flex items-start gap-4 label-caps"
-                initial={{ opacity: 0, x: -20 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 + index * 0.08 }}
               >
                 <SectionIcon name={item.icon} className="text-antique-gold h-6 w-6 mt-1 flex-shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-on-surface-variant/60 text-body-sm">{t(item.label)}</p>
+                  <p className="text-on-surface-variant text-body-sm">{t(item.label)}</p>
                   {item.href ? (
                     <a href={item.href} className="break-words text-deep-forest hover:text-antique-gold transition-colors text-body-md">
                       {t(item.value)}

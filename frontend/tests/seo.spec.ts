@@ -1,6 +1,83 @@
 import { expect, test } from "@playwright/test";
 import { readSiteConfig } from "../src/lib/site-config";
 import { siteDetails } from "../src/data/site";
+import ml from "../src/i18n/ml.json" with { type: "json" };
+import { localeFromSegments } from "../src/i18n/routing";
+import { pageMetadata } from "../src/lib/seo";
+
+test("locale routing accepts exactly the two published languages", () => {
+  expect(localeFromSegments()).toBe("en");
+  expect(localeFromSegments([])).toBe("en");
+  expect(localeFromSegments(["ml"])).toBe("ml");
+  for (const segments of [["en"], ["ML"], ["fr"], ["ml", "rooms"], ["<script>"], [".."]]) {
+    expect(localeFromSegments(segments)).toBeUndefined();
+  }
+});
+
+for (const locale of ["en", "ml"] as const) {
+  test(`${locale} metadata keeps production and preview indexing rules`, () => {
+    const metadata = pageMetadata(locale);
+    expect(metadata.title).toBe(locale === "en" ? siteDetails.title : ml[siteDetails.title as keyof typeof ml]);
+    expect(metadata.alternates?.canonical).toBe(`${readSiteConfig().origin}${locale === "en" ? "/" : "/ml"}`);
+    expect(metadata.robots).toMatchObject({ index: readSiteConfig().indexable, follow: true });
+  });
+}
+
+for (const { locale, path, heading } of [
+  { locale: "en", path: "/", heading: "Grand Sapphire Resorts in Thankamony, Idukki" },
+  { locale: "ml", path: "/ml", heading: "തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്" },
+] as const) {
+  test(`${locale} has crawlable localized HTML and reciprocal language metadata`, async ({ browser, request }) => {
+    const response = await request.get(path);
+    expect(response.status()).toBe(200);
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto(`http://127.0.0.1:3100${path}`);
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+    expect(new URL((await page.locator('link[rel="canonical"]').getAttribute("href"))!).href).toBe(`${readSiteConfig().origin}${path}`);
+    for (const [language, suffix] of [["en", "/"], ["ml", "/ml"], ["x-default", "/"]]) {
+      expect(new URL((await page.locator(`link[rel="alternate"][hreflang="${language}"]`).getAttribute("href"))!).href).toBe(`${readSiteConfig().origin}${suffix}`);
+    }
+    const description = locale === "ml" ? ml[siteDetails.description as keyof typeof ml] : siteDetails.description;
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+    await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute("content", locale === "ml" ? "ml_IN" : "en_IN");
+    const business = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent())!);
+    expect(business.description).toBe(description);
+    expect(business["@id"]).toBe(`${readSiteConfig().origin}/#resort`);
+    const entities = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const website = entities.map(text => JSON.parse(text)).find(entity => entity["@type"] === "WebSite");
+    const webPage = entities.map(text => JSON.parse(text)).find(entity => entity["@type"] === "WebPage");
+    expect(website).toMatchObject({ name: siteDetails.name, url: `${readSiteConfig().origin}/` });
+    expect(webPage).toMatchObject({ inLanguage: locale === "ml" ? "ml-IN" : "en-IN", about: { "@id": business["@id"] } });
+    await expect(page.locator('meta[property="og:image"]').first()).toHaveAttribute("content", new RegExp(`^${readSiteConfig().origin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/opengraph-image`));
+    await expect(page.locator('header a[hreflang="en"]')).toHaveAttribute("href", "/");
+    await expect(page.locator('header a[hreflang="ml"]')).toHaveAttribute("href", "/ml");
+    await context.close();
+  });
+
+  test(`${locale} core location information is readable without JavaScript`, async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto(`http://127.0.0.1:3100${path}`);
+    await expect(page.locator('#location a[href="tel:+918547639769"]')).toHaveCount(1);
+    const hidden = await page.locator('#hero h1, #location h2, #location a[href^="tel:"]').evaluateAll(elements => elements.filter(element => {
+      for (let current: Element | null = element; current; current = current.parentElement) {
+        const style = getComputedStyle(current);
+        if (style.opacity === "0" || style.visibility === "hidden" || style.display === "none") return true;
+      }
+      return false;
+    }).map(element => element.textContent));
+    expect(hidden).toEqual([]);
+    await context.close();
+  });
+}
+
+test("only supported locale URLs are authored pages", async ({ request }) => {
+  for (const path of ["/en", "/ML", "/fr", "/ml/rooms", "/ml%3Cscript%3E"]) {
+    expect((await request.get(path)).status(), path).toBe(404);
+  }
+});
 
 test("production uses its confirmed origin while previews cannot be indexed", () => {
   const env = { SITE_URL: "https://resort.example", CONTEXT: "production" };
@@ -49,6 +126,7 @@ test("canonical, robots and sitemap agree on the build's public origin", async (
   if (config.indexable) {
     expect(await robots.text()).toContain(`Sitemap: ${config.origin}/sitemap.xml`);
     expect(await sitemap.text()).toContain(`<loc>${config.origin}/</loc>`);
+    expect(await sitemap.text()).toContain(`<loc>${config.origin}/ml</loc>`);
   } else expect(await sitemap.text()).not.toContain("<loc>");
 });
 

@@ -1,5 +1,5 @@
-import en from "./en.json";
-import ml from "./ml.json";
+import en from "./en.json" with { type: "json" };
+import ml from "./ml.json" with { type: "json" };
 
 export type Locale = "en" | "ml";
 export const messages = { en, ml };
