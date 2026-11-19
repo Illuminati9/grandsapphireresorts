@@ -53,7 +53,7 @@ npm run test:e2e
 
 The 50-check suite serves the production build on port 3100. It covers English and Malayalam at seven widths (320–1440px), language persistence and blocked storage, hydration with both motion preferences, keyboard dialogs, gallery navigation, touch controls, autoplay pause/resume, image fallbacks, dark system themes, booking links, contact details, and configuration validation. Run `npm run build` before it. On a machine with Chrome installed, `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` can use that browser instead of downloading Chromium. Booking.com is stubbed in tests; no transaction is submitted. These checks cover the public home page, not unused component exports or third-party booking internals.
 
-GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and build-time Google font fetching require network access. Lint passes without warnings. The unused gradient text utility flagged by the design check was removed; no design-check suppressions were added.
+GitHub Actions runs these checks on pull requests and pushes to `main`, using Node 24. Browser downloads and build-time Google font fetching require network access. Lint passes without warnings. The unused gradient text utility flagged by the design check was removed. The detector has one file-and-value-scoped exception for the pre-existing, unused `--transition-spring` token in `globals.css`; it has no consumers in the page, and the bounce-easing rule stays active elsewhere.
 
 ## Deployment
 

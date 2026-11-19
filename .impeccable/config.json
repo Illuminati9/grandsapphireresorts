@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "files": [
+          "frontend/src/app/globals.css"
+        ],
+        "createdAt": "2026-11-19T10:46:59.189Z",
+        "reason": "Agent verified: unused legacy --transition-spring token from commit 6f8b77f0; no var(--transition-spring) or ease-spring consumers exist in frontend sources."
+      }
+    ]
+  }
+}
