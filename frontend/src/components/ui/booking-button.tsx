@@ -1,9 +1,11 @@
 "use client";
 
+import { useMotionPreference } from "@/hooks/useMotionPreference";
 import React from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { bookingHref, bookingLinkProps } from "@/data/booking";
+import { useLanguage } from "@/components/layout/LanguageProvider";
 
 type BookingButtonProps = Omit<HTMLMotionProps<"a">, "children"> & {
   children?: React.ReactNode;
@@ -22,7 +24,7 @@ type BookingButtonProps = Omit<HTMLMotionProps<"a">, "children"> & {
 export const BookingButton = React.forwardRef<HTMLAnchorElement, BookingButtonProps>(
   (
     {
-      children = "Book Your Stay",
+      children,
       href = bookingHref(),
       className = "",
       variant = "booking",
@@ -32,6 +34,8 @@ export const BookingButton = React.forwardRef<HTMLAnchorElement, BookingButtonPr
     },
     ref
   ) => {
+    const { t } = useLanguage();
+    const reduceMotion = useMotionPreference();
     const variantStyles = {
       primary: cn(
         "group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-button min-h-[48px] relative overflow-hidden",
@@ -73,34 +77,21 @@ export const BookingButton = React.forwardRef<HTMLAnchorElement, BookingButtonPr
         ref={ref}
         {...bookingLinkProps(href)}
         {...rest}
-        whileHover={{ scale: variant === "booking" ? 1.02 : 1.01 }}
-        whileTap={whileTap}
+        whileHover={reduceMotion ? undefined : { scale: variant === "booking" ? 1.02 : 1.01 }}
+        whileTap={reduceMotion ? undefined : whileTap}
         transition={transition}
         className={cn(variantStyles[variant], className)}
       >
-        {/* Text with shine mask - uses CSS variable --mask-x animated via Framer Motion */}
-        <motion.span
+        <span
           className="tracking-wide font-light flex items-center justify-center h-full w-full relative z-10"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(-75deg, white calc(var(--mask-x) + 20%), transparent calc(var(--mask-x) + 30%), white calc(var(--mask-x) + 100%))",
-            maskImage:
-              "linear-gradient(-75deg, white calc(var(--mask-x) + 20%), transparent calc(var(--mask-x) + 30%), white calc(var(--mask-x) + 100%))",
-          }}
-          initial={{ ["--mask-x"]: "100%" }}
-          animate={{ ["--mask-x"]: "-100%" }}
-          transition={{
-            repeat: Infinity,
-            duration: 1,
-            ease: "linear",
-            repeatDelay: 1,
-          }}
         >
-          {children}
-        </motion.span>
+          {children ?? t("Book Your Stay")}
+        </span>
 
         {/* Border shine effect - uses --shine CSS variable for theme-aware color */}
-        <motion.span
+        {!reduceMotion && <motion.span
+          aria-hidden="true"
+          data-booking-shine
           className="block absolute inset-0 rounded-button p-px"
           style={{
             background:
@@ -120,7 +111,7 @@ export const BookingButton = React.forwardRef<HTMLAnchorElement, BookingButtonPr
             ease: "linear",
             repeatDelay: 1,
           }}
-        />
+        />}
       </motion.a>
     );
   }

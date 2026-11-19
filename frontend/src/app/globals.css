@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
-
 @font-face {
   font-family: 'Storm Wraith';
   src: url('/font/StormWraithPersonalUse-aYd8g.ttf') format('truetype');
@@ -13,9 +11,8 @@
 }
 
 :root {
-  --font-inter: 'Inter', system-ui, sans-serif;
+  color-scheme: light;
   --font-brand: 'Storm Wraith', 'Cormorant Garamond', Georgia, serif;
-  --font-cormorant-garamond: 'Cormorant Garamond', Georgia, serif;
 
   --color-deep-forest: #122E22;
   --color-twilight-navy: #0D1B2E;
@@ -84,17 +81,22 @@
   --card-gap: 24px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #0D1B2E;
-    --color-on-background: #F4F1E8;
-    --color-surface: #122E22;
-    --color-on-surface: #F4F1E8;
-  }
+html[lang="ml"] :is(body, h1, h2, h3, h4, h5, h6, .font-headline, .font-body, .font-label) {
+  font-family: var(--font-malayalam), sans-serif;
+  letter-spacing: 0;
+  line-height: 1.65;
 }
+
+html[lang="ml"] h1 { font-size: clamp(1.75rem, 5vw, 3rem); }
+html[lang="ml"] h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+html[lang="ml"] h3 { font-size: 1.25rem; }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: var(--header-offset, 112px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -371,13 +373,6 @@ img {
 
   .gradient-gold {
     background: linear-gradient(135deg, rgba(201, 162, 39, 0.1) 0%, transparent 50%);
-  }
-
-  .text-gradient-gold {
-    background: linear-gradient(135deg, var(--color-antique-gold), var(--color-amber-glow));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .animate-fade-in-up {

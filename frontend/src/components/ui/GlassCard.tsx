@@ -1,6 +1,8 @@
 "use client";
 
 import { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
+import { ResortImage } from "./ResortImage";
+import { cn } from "@/lib/utils";
 
 export interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "experience" | "amenity" | "luxury" | "glass" | "glass-dark";
@@ -51,10 +53,10 @@ export const CardImage = forwardRef<HTMLDivElement, CardImageProps>(
     return (
       <div
         ref={ref}
-        className={`${aspectStyles[aspectRatio]} w-full rounded-t-card overflow-hidden ${className}`}
+        className={cn("relative w-full rounded-t-card overflow-hidden", aspectStyles[aspectRatio], className)}
         {...props}
       >
-        <img src={src} alt={alt} className="w-full h-full object-cover" />
+        <ResortImage src={src} alt={alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
       </div>
     );
   }

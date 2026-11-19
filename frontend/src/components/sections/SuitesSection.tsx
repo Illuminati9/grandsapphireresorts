@@ -1,5 +1,7 @@
 "use client";
 
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { motion } from "framer-motion";
 import { CardImage, CardContent, CardTitle, CardDescription, CardPrice } from "@/components/ui";
 import { bookingHref, bookingLinkProps } from "@/data/booking";
@@ -35,6 +37,7 @@ const suites = [
 ];
 
 export function SuitesSection() {
+  const { t } = useLanguage();
   return (
     <section id="villas" className="py-xl max-w-max-width mx-auto px-md sm:px-lg accommodations-section" aria-labelledby="suites-title">
       <div className="mb-12 text-center md:text-left">
@@ -48,7 +51,7 @@ export function SuitesSection() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          Accommodations
+          {t("Accommodations")}
         </motion.h2>
         <motion.p
           className="text-on-surface-variant max-w-2xl"
@@ -57,14 +60,14 @@ export function SuitesSection() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         >
-          Discover our thoughtfully designed spaces, blending rustic charm with modern comfort.
+          {t("Discover our thoughtfully designed spaces, blending rustic charm with modern comfort.")}
         </motion.p>
       </div>
 
       <div
         className="grid grid-cols-1 md:grid-cols-3 gap-md accommodations-grid"
         role="list"
-        aria-label="Villa options"
+        aria-label={t("Villa options")}
       >
         {suites.map((suite, index) => (
           <motion.article
@@ -79,29 +82,29 @@ export function SuitesSection() {
             <div className="relative h-64 overflow-hidden image-container">
               <CardImage
                 src={suite.image}
-                alt={suite.alt}
+                alt={t(suite.name)}
                 aspectRatio="video"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 card-image"
               />
             </div>
             <CardContent className="p-6">
               <CardTitle level={3} className="font-headline text-2xl text-deep-forest mb-2">
-                {suite.name}
+                {t(suite.name)}
               </CardTitle>
-              <CardDescription className="mb-6 min-h-[48px]">{suite.description}</CardDescription>
+              <CardDescription className="mb-6 min-h-[48px]">{t(suite.description)}</CardDescription>
               <div className="flex justify-between items-end border-t border-surface-variant pt-4">
                 <div>
-                  <p className="text-sm text-on-surface-variant">Starting from</p>
+                  <p className="text-sm text-on-surface-variant">{t("Starting from")}</p>
                   <CardPrice className="text-xl font-semibold text-deep-forest">
-                    {suite.price} <span className="text-sm font-normal">{suite.period}</span>
+                    {suite.price} <span className="text-sm font-normal">{t(suite.period)}</span>
                   </CardPrice>
                 </div>
                 <a
                   {...bookingLinkProps(bookingHref(suite.id))}
-                  aria-label={`Reserve ${suite.name}`}
+                  aria-label={t("Reserve {name}", { name: t(suite.name) })}
                   className="btn-secondary bg-deep-forest text-warm-ivory px-4 py-2 rounded text-sm hover:bg-twilight-navy transition-colors border border-transparent hover:border-antique-gold"
                 >
-                  Reserve
+                  {t("Reserve")}
                 </a>
               </div>
             </CardContent>

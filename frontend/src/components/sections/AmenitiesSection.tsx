@@ -1,5 +1,8 @@
 "use client";
 
+import { SectionIcon } from "@/components/ui/SectionIcon";
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { motion } from "framer-motion";
 import { CardImage, CardTitle, CardDescription } from "@/components/ui";
 
@@ -42,9 +45,10 @@ const amenities = [
 ];
 
 export function AmenitiesSection() {
+  const { t } = useLanguage();
   return (
     <section id="facilities" className="bg-surface-container-low py-xl facilities-section" aria-labelledby="amenities-title">
-      <div className="max-w-content mx-auto px-lg">
+      <div className="max-w-content mx-auto px-md sm:px-lg">
         <div className="mb-12">
           <motion.h2
             id="amenities-title"
@@ -54,7 +58,7 @@ export function AmenitiesSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            Resort Facilities
+            {t("Resort Facilities")}
           </motion.h2>
           <motion.p
             className="section-subtitle mt-4"
@@ -63,14 +67,14 @@ export function AmenitiesSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            Everything you need for a comfortable and memorable stay.
+            {t("Everything you need for a comfortable and memorable stay.")}
           </motion.p>
         </div>
 
         <div
           className="grid grid-cols-2 md:grid-cols-4 gap-md auto-rows-[200px] facilities-grid"
           role="list"
-          aria-label="Facilities"
+          aria-label={t("Facilities")}
         >
           {amenities.map((amenity, index) => {
             if (amenity.large) {
@@ -86,20 +90,18 @@ export function AmenitiesSection() {
                 >
                   <CardImage
                     src={amenity.image}
-                    alt={`${amenity.name} at Grand Sapphire Resorts`}
+                    alt={t("{name} at Grand Sapphire Resorts", { name: t(amenity.name) })}
                     aspectRatio="video"
                     className="w-full h-full object-cover absolute inset-0 facility-large-img"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-deep-forest/80 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-6 w-full">
-                    <span className="material-symbols-outlined text-antique-gold mb-2 text-3xl" data-icon={amenity.icon} aria-hidden="true">
-                      {amenity.icon}
-                    </span>
+                    <SectionIcon name={amenity.icon} className="text-antique-gold mb-2 h-6 w-6" />
                     <CardTitle level={3} className="font-headline text-2xl text-warm-ivory">
-                      {amenity.name}
+                      {t(amenity.name)}
                     </CardTitle>
-                    <CardDescription className="text-warm-ivory/80 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {amenity.description}
+                    <CardDescription className="text-warm-ivory/90 text-sm mt-2">
+                      {t(amenity.description)}
                     </CardDescription>
                   </div>
                 </motion.article>
@@ -118,22 +120,20 @@ export function AmenitiesSection() {
                   role="listitem"
                 >
                   <div className="absolute inset-0 flex items-center p-6 gap-6 z-10">
-                    <span className="material-symbols-outlined text-antique-gold text-4xl" data-icon={amenity.icon} aria-hidden="true">
-                      {amenity.icon}
-                    </span>
+                    <SectionIcon name={amenity.icon} className="text-antique-gold h-9 w-9" />
                     <div>
                       <CardTitle level={3} className="font-headline text-xl text-deep-forest">
-                        {amenity.name}
+                        {t(amenity.name)}
                       </CardTitle>
                       <CardDescription className="text-on-surface-variant text-sm mt-1">
-                        {amenity.description}
+                        {t(amenity.description)}
                       </CardDescription>
                     </div>
                   </div>
                   <div className="absolute right-0 top-0 w-1/2 h-full">
                     <CardImage
                       src={amenity.image}
-                      alt={`${amenity.name} at Grand Sapphire Resorts`}
+                      alt={t("{name} at Grand Sapphire Resorts", { name: t(amenity.name) })}
                       aspectRatio="video"
                       className="w-full h-full object-cover opacity-60 card-image"
                     />
@@ -155,16 +155,14 @@ export function AmenitiesSection() {
                   role="listitem"
                 >
                   <div className="absolute inset-0 flex flex-col justify-center items-center p-4 text-center z-10">
-                    <span className="material-symbols-outlined text-amber-glow text-4xl mb-2" data-icon={amenity.icon} aria-hidden="true">
-                      {amenity.icon}
-                    </span>
+                    <SectionIcon name={amenity.icon} className="text-amber-glow h-9 w-9 mb-2" />
                     <CardTitle level={3} className="font-headline text-lg text-warm-ivory">
-                      {amenity.name}
+                      {t(amenity.name)}
                     </CardTitle>
                   </div>
                   <CardImage
                     src={amenity.image}
-                    alt={`${amenity.name} at Grand Sapphire Resorts`}
+                    alt={t("{name} at Grand Sapphire Resorts", { name: t(amenity.name) })}
                     aspectRatio="video"
                     className="w-full h-full object-cover absolute inset-0 opacity-40 card-image"
                   />
@@ -183,11 +181,9 @@ export function AmenitiesSection() {
                 role="listitem"
               >
                 <div className="absolute inset-0 flex flex-col justify-center items-center p-4 text-center z-10">
-                  <span className="material-symbols-outlined text-antique-gold text-4xl mb-2" data-icon={amenity.icon} aria-hidden="true">
-                    {amenity.icon}
-                  </span>
+                  <SectionIcon name={amenity.icon} className="text-antique-gold h-9 w-9 mb-2" />
                   <CardTitle level={3} className="font-headline text-lg text-deep-forest">
-                    {amenity.name}
+                    {t(amenity.name)}
                   </CardTitle>
                 </div>
               </motion.article>

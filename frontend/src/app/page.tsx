@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main id="main-content" role="main">
+      <main id="main-content" tabIndex={-1}>
         <HeroSection />
         <TrustStripSection />
         <SuitesSection />

@@ -1,7 +1,11 @@
 "use client";
 
+import { useMotionPreference } from "@/hooks/useMotionPreference";
+import { SectionIcon } from "@/components/ui/SectionIcon";
+import { useLanguage } from "@/components/layout/LanguageProvider";
+
 import { useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { CardImage, CardContent, CardTitle } from "@/components/ui";
 
 const experiences = [
@@ -36,8 +40,9 @@ const experiences = [
 ];
 
 export function ExperiencesSection() {
+  const { t } = useLanguage();
   const carouselRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useMotionPreference();
 
   const scrollCarousel = (direction: 1 | -1) => {
     const carousel = carouselRef.current;
@@ -53,8 +58,8 @@ export function ExperiencesSection() {
   };
 
   return (
-    <section id="experiences" className="py-xl max-w-content mx-auto px-lg experiences-section" aria-labelledby="experiences-title">
-      <div className="flex justify-between items-end mb-12">
+    <section id="experiences" className="py-xl max-w-content mx-auto px-md sm:px-lg experiences-section" aria-labelledby="experiences-title">
+      <div className="flex flex-col items-start gap-6 sm:flex-row sm:justify-between sm:items-end mb-12">
         <div>
           <motion.h2
             id="experiences-title"
@@ -64,7 +69,7 @@ export function ExperiencesSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            Curated Experiences
+            {t("Curated Experiences")}
           </motion.h2>
           <motion.p
             className="section-subtitle mt-4 max-w-xl"
@@ -73,27 +78,27 @@ export function ExperiencesSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            Explore the rugged beauty of the Western Ghats with our guided outdoor activities.
+            {t("Explore the rugged beauty of the Western Ghats with our guided outdoor activities.")}
           </motion.p>
         </div>
-        <div className="hidden md:flex gap-2">
+        <div className="flex shrink-0 gap-2">
           <button
             type="button"
             className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
             onClick={() => scrollCarousel(-1)}
             aria-controls="experiences-carousel"
-            aria-label="Previous experience"
+            aria-label={t("Previous experience")}
           >
-            <span className="material-symbols-outlined" data-icon="arrow_back" aria-hidden="true">arrow_back</span>
+            <SectionIcon name="arrow_back" className="h-6 w-6" />
           </button>
           <button
             type="button"
             className="w-10 h-10 rounded-full border border-antique-gold/50 flex items-center justify-center text-deep-forest hover:bg-antique-gold/10 transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antique-gold"
             onClick={() => scrollCarousel(1)}
             aria-controls="experiences-carousel"
-            aria-label="Next experience"
+            aria-label={t("Next experience")}
           >
-            <span className="material-symbols-outlined" data-icon="arrow_forward" aria-hidden="true">arrow_forward</span>
+            <SectionIcon name="arrow_forward" className="h-6 w-6" />
           </button>
         </div>
       </div>
@@ -103,8 +108,9 @@ export function ExperiencesSection() {
         id="experiences-carousel"
         className="flex overflow-x-auto gap-md pb-8 hide-scrollbar snap-x experiences-container"
         data-lenis-prevent-horizontal
+        tabIndex={0}
         role="list"
-        aria-label="Experiences carousel"
+        aria-label={t("Experiences carousel")}
       >
         {experiences.map((experience, index) => (
           <motion.article
@@ -124,16 +130,16 @@ export function ExperiencesSection() {
             <div className="h-48 relative image-container">
               <CardImage
                 src={experience.image}
-                alt={experience.alt}
+                alt={t(experience.name)}
                 aspectRatio="video"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04] card-image"
               />
             </div>
             <CardContent className="p-6">
               <CardTitle level={3} className="font-headline text-xl text-deep-forest mb-2">
-                {experience.name}
+                {t(experience.name)}
               </CardTitle>
-              <p className="text-sm text-on-surface-variant mb-6 line-clamp-2">{experience.description}</p>
+              <p className="text-sm text-on-surface-variant mb-6">{t(experience.description)}</p>
             </CardContent>
           </motion.article>
         ))}

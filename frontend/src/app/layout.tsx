@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Inter, Cormorant_Garamond, Noto_Sans_Malayalam } from "next/font/google";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { LanguageProvider } from "@/components/layout/LanguageProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,6 +17,8 @@ const cormorantGaramond = Cormorant_Garamond({
   display: "swap",
   weight: ["400", "600"],
 });
+
+const malayalam = Noto_Sans_Malayalam({ subsets: ["malayalam"], variable: "--font-malayalam", display: "swap", weight: "variable", preload: false });
 
 export const metadata: Metadata = {
   title: "Grand Sapphire Resorts | Twilight in the Hills",
@@ -46,15 +49,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorantGaramond.variable}`}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back,arrow_forward,call,chevron_down,close,directions_car,email,facebook,family_restroom,globe,instagram,keyboard_double_arrow_down,local_airport,local_fire_department,location_on,login,logout,map,menu,pool,restaurant,sports_esports,support_agent,train,twitter,videocam,wifi"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} ${cormorantGaramond.variable} ${malayalam.variable}`}>
       <body className="antialiased">
-        <SmoothScroll>{children}</SmoothScroll>
+        <LanguageProvider><SmoothScroll>{children}</SmoothScroll></LanguageProvider>
       </body>
     </html>
   );
