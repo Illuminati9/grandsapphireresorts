@@ -46,7 +46,7 @@ test("desktop language links navigate to localized URLs and survive reload", asy
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്");
   await expect(page.getByRole("heading", { name: "താമസസൗകര്യങ്ങൾ", exact: true })).toBeAttached();
   await expect(page.getByRole("heading", { name: "റിസോർട്ട് സൗകര്യങ്ങൾ", exact: true })).toBeAttached();
-  await expect(page.getByRole("heading", { name: "ഞങ്ങളെ സന്ദർശിക്കൂ", exact: true })).toBeAttached();
+  await expect(page.getByRole("heading", { name: "തങ്കമണി, ഇടുക്കിയിൽ ഞങ്ങളെ സന്ദർശിക്കൂ", exact: true })).toBeAttached();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "ml");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്");
