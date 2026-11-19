@@ -3,11 +3,10 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { siteDetails } from "@/data/site";
 
-export const alt = "Grand Sapphire Resorts in Thankamony, Idukki, Kerala";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const dynamic = "force-static";
+const size = { width: 1200, height: 630 };
 
-export default async function OpenGraphImage() {
+export async function GET() {
   const photo = await readFile(join(process.cwd(), "public", siteDetails.image));
   return new ImageResponse(
     <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "#122e22", backgroundImage: `url(data:image/jpeg;base64,${photo.toString("base64")})`, backgroundSize: "cover", backgroundPosition: "center" }}>

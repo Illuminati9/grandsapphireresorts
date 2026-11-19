@@ -29,9 +29,17 @@ The owner has offered to provide sources for displayed room rates, guest reviews
 
 The `StormWraithPersonalUse-aYd8g.ttf` filename indicates a personal-use edition; confirm a commercial license with the owner or replace it with a font licensed for the business site. Do not claim a license solely from the filename.
 
+The header uses `storm-wraith-brand.woff2`, a compact subset of the existing font for the fixed text “Grand Sapphire Resorts.” Its glyph outlines and all name/copyright/license records were checked against the original; this optimization does not establish commercial rights. Keep the original TTF as the source and a legacy-browser fallback. If the brand text changes, regenerate the subset with the new characters. Optional asset-generation tools (FontTools 4.60.2 and Brotli 1.2.1) are not production or build dependencies:
+
+```sh
+python scripts/subset-brand-font.py
+```
+
+The tool preserves glyph placement, bounds, advance widths and all name/copyright/license records, and validates them before replacing the generated asset. It preserves the original source file. The source contains bounding boxes that a default conversion can normalize by one font unit; use the checked-in tool rather than a default conversion.
+
 ## Search scope
 
-The current indexable surface is one English server-rendered home page. Malayalam is a client preference; there are no distinct Malayalam URLs or hreflang alternates yet. Add server-rendered locale routes with reciprocal alternates before treating Malayalam as an independent search landing page.
+The indexable surface contains English at `/` and Malayalam at `/ml`. Both pages are statically rendered with the matching document language, text, metadata and self-canonical. Reciprocal `en`/`ml` alternatives and an English `x-default` identify the language peers; the production sitemap lists both. Language links navigate to a different URL rather than changing content behind one canonical. Verify both languages after every release, including raw HTML without JavaScript and back/forward navigation. No search ranking or completed Google indexing is implied by these technical checks.
 
 There is no guaranteed first position. Google's local results depend on relevance, distance and prominence; website work, a verified Business Profile, useful content, legitimate reviews and other sites' references all contribute.
 

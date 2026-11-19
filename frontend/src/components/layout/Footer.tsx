@@ -4,15 +4,16 @@ import Link from "next/link";
 import { reservationDetails, resortDetails } from "@/data/reservations";
 import { bookingHref, bookingLinkProps } from "@/data/booking";
 import { useLanguage } from "./LanguageProvider";
+import { localePaths } from "@/i18n/routing";
 
 export function Footer() {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
   const links = [{ href: "#villas", label: "Villas" }, { href: "#facilities", label: "Facilities" }, { href: "#experiences", label: "Experiences" }, { href: "#location", label: "Contact Us" }];
   return (
     <footer className="bg-deep-forest w-full border-t border-antique-gold/20 mt-xl site-footer">
       <div className="flex flex-col md:flex-row justify-between items-start px-6 md:px-lg py-xl max-w-content mx-auto gap-10">
         <div>
-          <Link href="/" className="font-headline text-2xl text-antique-gold mb-2 block focus-ring" aria-label={t("Grand Sapphire Resorts - Home")}>
+          <Link href={localePaths[locale]} className="font-headline text-2xl text-antique-gold mb-2 block focus-ring" aria-label={t("Grand Sapphire Resorts - Home")}>
             Grand Sapphire Resorts
           </Link>
           <p className="text-on-primary-container text-sm">{t("Idukki, Kerala, India")}</p>

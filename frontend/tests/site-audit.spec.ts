@@ -14,8 +14,7 @@ for (const width of [320, 375, 768, 1024, 1279, 1280, 1440]) {
   test(`Malayalam layout fits at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.addInitScript(() => localStorage.setItem("grand-sapphire-language", "ml"));
-    await page.goto("/");
+    await page.goto("/ml");
     await expect(page.locator("html")).toHaveAttribute("lang", "ml");
     await page.evaluate(() => document.fonts.ready);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
@@ -38,33 +37,36 @@ for (const width of [320, 375, 768, 1024, 1279, 1280, 1440]) {
   });
 }
 
-test("desktop language selection translates the page and survives reload", async ({ page }) => {
+test("desktop language links navigate to localized URLs and survive reload", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await page.getByRole("button", { name: "Switch to Malayalam", exact: true }).click();
+  await page.getByRole("link", { name: "Switch to Malayalam", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "ml");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("പ്രകൃതിയിൽ വിശ്രമിക്കൂ, ആഡംബരം അനുഭവിക്കൂ");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്");
   await expect(page.getByRole("heading", { name: "താമസസൗകര്യങ്ങൾ", exact: true })).toBeAttached();
   await expect(page.getByRole("heading", { name: "റിസോർട്ട് സൗകര്യങ്ങൾ", exact: true })).toBeAttached();
   await expect(page.getByRole("heading", { name: "ഞങ്ങളെ സന്ദർശിക്കൂ", exact: true })).toBeAttached();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "ml");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("പ്രകൃതിയിൽ വിശ്രമിക്കൂ, ആഡംബരം അനുഭവിക്കൂ");
-  await page.getByRole("button", { name: "ഇംഗ്ലീഷിലേക്ക് മാറുക", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്");
+  await page.getByRole("link", { name: "ഇംഗ്ലീഷിലേക്ക് മാറുക", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Unwind in Nature, Live in Luxury");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Grand Sapphire Resorts in Thankamony, Idukki");
 });
 
-test("mobile language selector controls the same page preference", async ({ page }) => {
+test("mobile language links navigate to the translated page", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByRole("combobox", { name: "Select language" }).selectOption("ml");
+  await page.getByRole("dialog").getByRole("link", { name: "Switch to Malayalam", exact: true }).click();
+  await expect(page).toHaveURL(/\/ml$/);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("button", { name: ml["Open menu"], exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "ml");
   await expect(page.getByRole("dialog").getByRole("link", { name: "വില്ലകൾ", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("പ്രകൃതിയിൽ വിശ്രമിക്കൂ, ആഡംബരം അനുഭവിക്കൂ");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്");
 });
 
 test("gallery is keyboard operable and its modal restores focus on Escape", async ({ page }) => {
@@ -108,22 +110,25 @@ test("language switching still works when preference storage is blocked", async 
     Storage.prototype.setItem = () => { throw new DOMException("Storage disabled", "SecurityError"); };
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "Switch to Malayalam", exact: true }).click();
+  await page.getByRole("link", { name: "Switch to Malayalam", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "ml");
-  await page.getByRole("button", { name: ml["Switch to English"], exact: true }).click();
+  await page.getByRole("link", { name: ml["Switch to English"], exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 });
 
-test("language preference stays synchronized across open tabs", async ({ page, context }) => {
+test("each tab keeps the language selected by its URL", async ({ page, context }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   const other = await context.newPage();
-  await other.setViewportSize({ width: 1440, height: 900 });
   await other.goto("/");
-  await page.getByRole("button", { name: "Switch to Malayalam", exact: true }).click();
+  await page.getByRole("link", { name: "Switch to Malayalam", exact: true }).click();
+  await expect(page).toHaveURL(/\/ml$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "ml");
+  await expect(other.locator("html")).toHaveAttribute("lang", "en");
+  await other.goto("/ml");
   await expect(other.locator("html")).toHaveAttribute("lang", "ml");
-  await other.getByRole("button", { name: ml["Switch to English"], exact: true }).click();
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await page.getByRole("link", { name: ml["Switch to English"], exact: true }).click();
+  await expect(other.locator("html")).toHaveAttribute("lang", "ml");
   await other.close();
 });
 
@@ -165,18 +170,55 @@ test("reduced motion disables automatic stories and booking shine while keeping 
   await expect(text).toHaveCSS("mask-image", "none");
 });
 
-for (const reducedMotion of ["reduce", "no-preference"] as const) {
-  test(`stored Malayalam hydrates without browser errors with motion ${reducedMotion}`, async ({ page }) => {
-    const errors: string[] = [];
-    page.on("pageerror", error => errors.push(error.message));
-    page.on("console", message => { if (message.type() === "error" && /hydration|server rendered|react error/i.test(message.text())) errors.push(message.text()); });
-    await page.emulateMedia({ reducedMotion });
-    await page.addInitScript(() => localStorage.setItem("grand-sapphire-language", "ml"));
-    await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(ml["Unwind in Nature, Live in Luxury"]);
-    await page.locator("footer").scrollIntoViewIfNeeded();
-    expect(errors).toEqual([]);
+for (const touch of [true, false]) {
+  test(`narrow ${touch ? "touch" : "pointer"} devices avoid initializing decorative WebGL`, async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: touch, hasTouch: touch });
+    const page = await context.newPage();
+    await page.addInitScript(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      Object.defineProperty(HTMLCanvasElement.prototype, "getContext", { value: function (this: HTMLCanvasElement, type: string, ...args: unknown[]) {
+        if (this.id === "hero-shader-canvas" && type.includes("webgl")) this.dataset.webglRequested = "true";
+        return Reflect.apply(original, this, [type, ...args]);
+      } });
+    });
+    await page.goto("http://127.0.0.1:3100/");
+    await page.waitForLoadState("networkidle");
+    await expect(page.locator("#hero-shader-canvas")).not.toHaveAttribute("data-webgl-requested", "true");
+    await expect(page.locator("#hero img")).toHaveAttribute("fetchpriority", "high");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await context.close();
   });
+}
+
+test("brand lettering loads a compact web font", async ({ page, request }) => {
+  const fonts: string[] = [];
+  page.on("request", item => { if (new URL(item.url()).pathname.startsWith("/font/")) fonts.push(item.url()); });
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  expect(fonts.length).toBeGreaterThan(0);
+  for (const url of fonts) {
+    expect(new URL(url).pathname).toMatch(/\.woff2$/);
+    const font = await request.get(url);
+    expect(font.ok()).toBe(true);
+    expect((await font.body()).length).toBeLessThan(50_000);
+  }
+});
+
+for (const reducedMotion of ["reduce", "no-preference"] as const) {
+  for (const locale of ["en", "ml"] as const) {
+    test(`${locale} URL hydrates without errors despite conflicting storage with motion ${reducedMotion}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", error => errors.push(error.message));
+      page.on("console", message => { if (message.type() === "error" && /hydration|server rendered|react error/i.test(message.text())) errors.push(message.text()); });
+      await page.emulateMedia({ reducedMotion });
+      await page.addInitScript(language => localStorage.setItem("grand-sapphire-language", language), locale === "en" ? "ml" : "en");
+      await page.goto(locale === "ml" ? "/ml" : "/");
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(locale === "ml" ? "തങ്കമണി, ഇടുക്കിയിലെ ഗ്രാൻഡ് സഫയർ റിസോർട്ട്സ്" : "Grand Sapphire Resorts in Thankamony, Idukki");
+      await page.locator("footer").scrollIntoViewIfNeeded();
+      expect(errors).toEqual([]);
+    });
+  }
 }
 
 test("phone users can reach the experience carousel controls and read full descriptions", async ({ page }) => {
@@ -210,8 +252,7 @@ for (const locale of ["en", "ml"] as const) {
     test(`${locale} section links keep titles below the header at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.addInitScript(language => localStorage.setItem("grand-sapphire-language", language), locale);
-      await page.goto("/");
+      await page.goto(locale === "ml" ? "/ml" : "/");
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       for (const id of ["villas", "facilities", "experiences", "location"]) {
         if (width < 1280) await page.locator('header button[aria-controls="mobile-menu"]').click();

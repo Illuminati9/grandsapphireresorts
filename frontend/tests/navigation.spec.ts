@@ -1,5 +1,33 @@
 import { expect, test } from "@playwright/test";
 
+test("language navigation preserves the correct page through back and forward", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Switch to Malayalam", exact: true }).click();
+  await expect(page).toHaveURL(/\/ml$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "ml");
+  await page.goBack();
+  await expect(page).toHaveURL("http://127.0.0.1:3100/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await page.goForward();
+  await expect(page.locator("html")).toHaveAttribute("lang", "ml");
+  await expect(page.locator('header a[aria-current="page"]')).toHaveAttribute("href", "/ml");
+  await expect(page.locator('footer a[aria-label="Grand Sapphire Resorts - മുഖ്യപേജ്"]')).toHaveAttribute("href", "/ml");
+});
+
+test("a language link opened in a new tab renders that URL's language", async ({ page, context }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const nextPage = context.waitForEvent("page");
+  await page.getByRole("link", { name: "Switch to Malayalam", exact: true }).click({ button: "middle" });
+  const other = await nextPage;
+  await other.waitForLoadState();
+  await expect(other).toHaveURL(/\/ml$/);
+  await expect(other.locator("html")).toHaveAttribute("lang", "ml");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await other.close();
+});
+
 for (const width of [320, 375, 768, 1024, 1279, 1280, 1440]) {
   test(`navigation fits at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });

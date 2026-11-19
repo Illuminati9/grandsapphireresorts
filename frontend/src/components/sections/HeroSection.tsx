@@ -43,7 +43,8 @@ export function HeroSection() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
+    // The photo and dark base carry the hero on touch devices without GPU startup work.
+    if (prefersReducedMotion || window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -203,7 +204,7 @@ void main() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-twilight-navy"
       aria-labelledby="hero-title"
     >
       <canvas
@@ -219,22 +220,25 @@ void main() {
         <ResortImage
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuClhg66ONDmAgn_Edn-CJhUsTTHf5ys_5umEJTksrPgE6gDW5B98Ajea_iAQE9BcIG5qW4rI1LnJhCCqNUVKjCa9Sswy9dAgRDwsg47nZLOrbcK2EKDOnjgxGLeDgoQgQMbNC4WkCxk8cMqgmnMYZKqATFAFeGkB3mtDrTs18JVrMy5-oMm73j_NIEcY4kBrRs_Th683kT6FbLoY3AcczopBpXDw3qRL0oPMR84IETxzwMdQlpEsZ4C41pGilbPj7GbIzIjpacBwjc"
           alt={t("Grand Sapphire Resort at twilight")}
-          fill sizes="100vw" preload fallbackSrc="/images/resort/hangout_area_outside.jpeg"
+          fill sizes="100vw" loading="eager" fetchPriority="high" fallbackSrc="/images/resort/hangout_area_outside.jpeg"
           className="w-full h-full object-cover hero-bg opacity-70 mix-blend-overlay"
         />
         <div className="absolute inset-0 bg-twilight-navy/30 hero-overlay" />
       </motion.div>
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-warm-ivory to-transparent z-[1]" aria-hidden="true" />
       <motion.div
-        className="relative z-10 text-center px-4 flex flex-col items-center mt-xl will-change-transform"
+        className="relative z-10 w-full min-w-0 text-center px-4 flex flex-col items-center mt-xl will-change-transform"
         style={{ y: contentY, opacity: contentOpacity }}
       >
         <h1
           id="hero-title"
-          className="font-headline text-hero-mobile md:text-hero-desktop text-warm-ivory mb-6 max-w-4xl drop-shadow-lg hero-headline"
+          className="font-headline text-hero-mobile md:text-hero-desktop text-warm-ivory mb-6 w-full max-w-4xl break-words drop-shadow-lg hero-headline"
         >
-          {t("Unwind in Nature, Live in Luxury")}
+          {t("Grand Sapphire Resorts in Thankamony, Idukki")}
         </h1>
+        <p className="max-w-2xl text-body-md text-warm-ivory drop-shadow-lg">
+          {t("Unwind in Nature, Live in Luxury")}
+        </p>
         <BookingButton
           variant="booking"
           className="mt-8 shadow-sm hero-cta"
