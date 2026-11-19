@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { googleReviewExcerpts } from "../src/data/google-reviews";
 import en from "../src/i18n/en.json" with { type: "json" };
 import ml from "../src/i18n/ml.json" with { type: "json" };
 
@@ -26,9 +27,9 @@ for (const width of [320, 375, 768, 1024, 1279, 1280, 1440]) {
     }
     const region = page.getByRole("region", { name: ml["Guest testimonials carousel"], exact: true });
     await region.scrollIntoViewIfNeeded();
-    for (let number = 1; number <= 5; number++) {
+    for (let number = 1; number <= googleReviewExcerpts.length; number++) {
       await region.getByRole("button", { name: ml["Show testimonial {number}"].replace("{number}", String(number)), exact: true }).click();
-      const card = (await region.getByRole("button", { name: /.+/, exact: false }).filter({ has: page.locator("[id$='-quote']") }).boundingBox())!;
+      const card = (await region.locator('article[aria-hidden="false"]').boundingBox())!;
       const stage = (await region.boundingBox())!;
       const controls = (await region.getByRole("button", { name: ml["Next testimonial"], exact: true }).boundingBox())!;
       expect(card.y).toBeGreaterThanOrEqual(stage.y);
@@ -157,7 +158,7 @@ test("failed remote photos use local images and guest initials", async ({ page }
   await expect.poll(() => heroImage.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   expect(await heroImage.getAttribute("src")).toContain("hangout_area_outside.jpeg");
   await page.locator("#testimonials").scrollIntoViewIfNeeded();
-  await expect(page.getByTestId("guest-avatar-fallback")).toHaveCount(5);
+  await expect(page.getByTestId("guest-avatar-fallback")).toHaveCount(googleReviewExcerpts.length);
 });
 
 test("reduced motion disables automatic stories and booking shine while keeping text visible", async ({ page }) => {

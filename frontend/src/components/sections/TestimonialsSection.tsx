@@ -5,76 +5,13 @@ import { useLanguage } from "@/components/layout/LanguageProvider";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { animate, motion, useInView } from "framer-motion";
-import { ArrowLeft, ArrowRight, BadgeCheck, Pause, Play, Quote, Star } from "lucide-react";
-import Image from "next/image";
-
-interface Testimonial {
-  id: string;
-  name: string;
-  location: string;
-  stayType: string;
-  rating: number;
-  quote: string;
-  image: string;
-}
-
-const testimonials: Testimonial[] = [
-  {
-    id: "aditya",
-    name: "Aditya Menon",
-    location: "Bengaluru, India",
-    stayType: "Superior Villa",
-    rating: 5,
-    quote: "The mountain mist, warm staff, and quiet gave our family the reset we needed.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-  },
-  {
-    id: "priya",
-    name: "Priya Sharma",
-    location: "Mumbai, India",
-    stayType: "Deluxe Mountain View",
-    rating: 5,
-    quote: "Waking up to the Western Ghats made our anniversary feel truly unforgettable.",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face",
-  },
-  {
-    id: "rajesh",
-    name: "Rajesh Kumar",
-    location: "Chennai, India",
-    stayType: "Family Dormitory",
-    rating: 5,
-    quote: "The children loved the trails and campfires while we had time to properly unwind.",
-    image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4e?w=200&h=200&fit=crop&crop=face",
-  },
-  {
-    id: "meera",
-    name: "Meera Nair",
-    location: "Kochi, India",
-    stayType: "Superior Villa",
-    rating: 5,
-    quote: "Our private villa felt beautifully secluded, with every detail handled thoughtfully.",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
-  },
-  {
-    id: "arjun",
-    name: "Arjun Patel",
-    location: "Hyderabad, India",
-    stayType: "Deluxe Mountain View",
-    rating: 4,
-    quote: "The local food and spa were the highlight of a wonderfully easy weekend away.",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
-  },
-];
+import { ArrowLeft, ArrowRight, Pause, Play, Quote, Star } from "lucide-react";
+import { googleReviewExcerpts as testimonials, googleReviewSnapshot } from "@/data/google-reviews";
 
 const stats = [
-  { value: 500, suffix: "+", label: "Happy Guests" },
-  { value: 4.9, suffix: "", label: "Average Rating" },
-  { value: 98, suffix: "%", label: "Would Return" },
+  { value: googleReviewSnapshot.reviewCount, suffix: "", label: "Google reviews" },
+  { value: googleReviewSnapshot.rating, suffix: "/5", label: "Google rating" },
+  { value: googleReviewSnapshot.fiveStarCount, suffix: "", label: "Five-star ratings" },
 ];
 
 function circularDistance(index: number, activeIndex: number, length: number) {
@@ -135,7 +72,7 @@ function StatCounter({ value, suffix, label }: (typeof stats)[number]) {
     <div className="text-center" aria-label={`${formatValue(value)} ${t(label)}`}>
       <p className="mb-1 font-headline text-3xl text-deep-forest sm:text-4xl md:text-5xl">
         <span ref={valueRef} aria-hidden="true">
-          {formatValue(0)}
+          {formatValue(value)}
         </span>
       </p>
       <p className="font-label text-[10px] tracking-[0.12em] text-on-surface-variant sm:text-label-caps sm:tracking-widest">
@@ -145,10 +82,12 @@ function StatCounter({ value, suffix, label }: (typeof stats)[number]) {
   );
 }
 
-function GuestAvatar({ src, name }: { src: string; name: string }) {
-  const [failed, setFailed] = useState(false);
-  return failed ? <span data-testid="guest-avatar-fallback" aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-antique-gold/50 bg-deep-forest font-semibold text-warm-ivory">{name.split(" ").map(part => part[0]).join("")}</span> :
-    <Image src={src} alt="" width={48} height={48} unoptimized onError={() => setFailed(true)} className="h-12 w-12 shrink-0 rounded-full border border-antique-gold/50 object-cover" />;
+function GuestAvatar({ name }: { name: string }) {
+  return (
+    <span data-testid="guest-avatar-fallback" aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-antique-gold/50 bg-deep-forest font-semibold text-warm-ivory">
+      {name.split(/\s+/).map(part => part[0]).join("")}
+    </span>
+  );
 }
 
 export function TestimonialsSection() {
@@ -183,11 +122,11 @@ export function TestimonialsSection() {
           </h2>
           <div className="accent-line mx-auto mb-6" />
           <p className="section-subtitle mx-auto">
-            {t("Hear from travellers who found a sanctuary in the hills and keep coming back.")}
+            {t("Selected excerpts from public Google Maps reviews. Read each full review for context.")}
           </p>
         </div>
 
-        <div className="mb-14 grid grid-cols-3 gap-4 md:mb-16 md:gap-10">
+        <div className="mb-5 grid grid-cols-3 gap-4 md:gap-10">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -201,7 +140,12 @@ export function TestimonialsSection() {
           ))}
         </div>
 
-        <div className={`relative mx-auto max-w-5xl ${locale === "ml" ? "h-[620px] sm:h-[580px]" : "h-[480px] sm:h-[480px] md:h-[510px]"}`} role="region" aria-label={t("Guest testimonials carousel")}>
+        <p className="mb-8 text-center text-sm text-on-surface-variant">
+          {t("Manual snapshot checked on")} <time dateTime={googleReviewSnapshot.checkedOn}>{t(googleReviewSnapshot.displayDate)}</time>.
+          {" "}<a href={googleReviewSnapshot.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline underline-offset-4 focus-ring">{t("Read all reviews on Google Maps")}</a>
+        </p>
+
+        <div className={`relative mx-auto max-w-5xl ${locale === "ml" ? "h-[620px] sm:h-[580px]" : "h-[520px] sm:h-[520px] md:h-[550px]"}`} role="region" aria-label={t("Guest testimonials carousel")}>
           <div className="absolute inset-0 overflow-hidden" role="group" aria-label={t("Guest Stories")} aria-live={isPaused ? "polite" : "off"}>
             {testimonials.map((testimonial, index) => {
               const distance = circularDistance(index, activeIndex, testimonials.length);
@@ -209,10 +153,9 @@ export function TestimonialsSection() {
               const isVisible = Math.abs(distance) <= 2;
 
               return (
-                <motion.button
+                <motion.article
                   key={testimonial.id}
-                  type="button"
-                  className="absolute left-1/2 top-1/2 w-[min(79vw,31rem)] cursor-pointer rounded-luxury border border-antique-gold/20 bg-deep-forest p-7 text-left text-warm-ivory shadow-hero outline-none focus-visible:ring-2 focus-visible:ring-antique-gold focus-visible:ring-offset-4 focus-visible:ring-offset-warm-ivory sm:p-9"
+                  className="absolute left-1/2 top-1/2 w-[min(79vw,31rem)] rounded-luxury border border-antique-gold/20 bg-deep-forest p-7 text-left text-warm-ivory shadow-hero outline-none focus-visible:ring-2 focus-visible:ring-antique-gold focus-visible:ring-offset-4 focus-visible:ring-offset-warm-ivory sm:p-9"
                   initial={false}
                   animate={{
                     x: distance * 245,
@@ -224,23 +167,19 @@ export function TestimonialsSection() {
                   }}
                   transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 155, damping: 22, mass: 0.9 }}
                   style={{ translate: "-50% -50%" }}
-                  onClick={() => setActiveIndex(index)}
-                  aria-label={t("Read testimonial from {name}", { name: testimonial.name })}
-                  aria-describedby={`testimonial-${testimonial.id}-quote`}
+                  aria-labelledby={`testimonial-${testimonial.id}-author`}
                   aria-hidden={!isActive}
-                  tabIndex={isActive ? 0 : -1}
                 >
                   <div className="absolute inset-0 rounded-luxury bg-gradient-to-br from-antique-gold/10 via-transparent to-transparent" />
                   <div className="relative">
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-3">
-                        <GuestAvatar src={testimonial.image} name={testimonial.name} />
+                        <GuestAvatar name={testimonial.name} />
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <p className="font-semibold text-warm-ivory">{testimonial.name}</p>
-                            <BadgeCheck className="h-4 w-4 text-antique-gold" aria-label={t("Verified guest")} />
+                            <p id={`testimonial-${testimonial.id}-author`} className="font-semibold text-warm-ivory">{testimonial.name}</p>
                           </div>
-                          <p className="text-xs text-warm-ivory/60">{t(testimonial.location)}</p>
+                          <p className="text-xs text-warm-ivory/60">{t("Google Maps reviewer")}</p>
                         </div>
                       </div>
                       <StarRating rating={testimonial.rating} />
@@ -250,9 +189,15 @@ export function TestimonialsSection() {
                     <p id={`testimonial-${testimonial.id}-quote`} className={`min-h-[5.25rem] text-warm-ivory ${locale === "ml" ? "font-body text-lg leading-relaxed sm:text-xl" : "font-headline text-2xl leading-tight sm:text-[2rem]"}`}>
                       &ldquo;{t(testimonial.quote)}&rdquo;
                     </p>
-                    <p className="mt-8 font-label text-xs tracking-[0.12em] text-antique-gold">{t(testimonial.stayType)}</p>
+                    <p className="mt-6 text-xs text-warm-ivory/70">
+                      {t(locale === "ml" ? "Translated from an English review excerpt" : "Excerpt from a Google Maps review")}
+                    </p>
+                    <a href={testimonial.url} target="_blank" rel="noopener noreferrer" tabIndex={isActive ? 0 : -1} className="mt-2 inline-flex min-h-11 items-center text-sm text-antique-gold underline underline-offset-4 focus-ring">
+                      {t("Read full review on Google Maps")}
+                    </a>
                   </div>
-                </motion.button>
+                  {!isActive && <button type="button" tabIndex={-1} aria-hidden="true" onClick={() => setActiveIndex(index)} className="absolute inset-0 cursor-pointer rounded-luxury" />}
+                </motion.article>
               );
             })}
           </div>

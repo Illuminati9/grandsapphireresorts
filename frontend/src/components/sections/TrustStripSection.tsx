@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/components/layout/LanguageProvider";
 
+import { googleReviewSnapshot } from "@/data/google-reviews";
 import { motion, type Variants } from "framer-motion";
 import { reservationDetails, resortDetails } from "@/data/reservations";
 import {
@@ -23,7 +24,7 @@ const trustItems = [
 ];
 
 const badges = [
-  { icon: Star, label: "4.9 Rating", sub: "Google Reviews" },
+  { icon: Star, label: "{rating} Rating", sub: "Google Reviews" },
   { icon: Award, label: "Top Rated", sub: "2024 Resort of the Year" },
   { icon: TreePine, label: "Eco Certified", sub: "Sustainable practises" },
 ];
@@ -75,8 +76,9 @@ export function TrustStripSection() {
                   <Icon className="w-4 h-4 text-antique-gold" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-deep-forest leading-tight">{t(badge.label)}</p>
+                  <p className="text-sm font-semibold text-deep-forest leading-tight">{t(badge.label, { rating: googleReviewSnapshot.rating })}</p>
                   <p className="text-xs text-on-surface-variant">{t(badge.sub)}</p>
+                  {badge.icon === Star && <p className="text-xs text-on-surface-variant"><time dateTime={googleReviewSnapshot.checkedOn}>{t(googleReviewSnapshot.displayDate)}</time></p>}
                 </div>
               </motion.div>
             );
