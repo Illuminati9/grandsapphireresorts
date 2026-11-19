@@ -29,7 +29,7 @@ export function Footer() {
         <nav aria-label={t("Booking and directions")} className="flex min-w-0 flex-col gap-4">
           <h2 className="font-headline text-xl text-warm-ivory">{t("Contact")}</h2>
           <a {...bookingLinkProps(bookingHref())} className="footer-link focus-ring">{t("Book Your Stay")}</a>
-          {reservationDetails.phone && <a href={`tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}`} className="footer-link focus-ring" aria-label={t("Call {name} for reservations", { name: resortDetails.contactName })}>{reservationDetails.phone}</a>}
+          {reservationDetails.phone && <a href={`tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}`} className="footer-link focus-ring" aria-label={t("Call {name} for reservations at {phone}", { name: resortDetails.contactName, phone: reservationDetails.phone })}>{reservationDetails.phone}</a>}
           {reservationDetails.mapsUrl && <a {...bookingLinkProps(reservationDetails.mapsUrl)} className="footer-link focus-ring">{t("Get directions on Google Maps")}</a>}
         </nav>
       </div>

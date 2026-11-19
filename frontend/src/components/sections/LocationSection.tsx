@@ -26,7 +26,7 @@ export function LocationSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {t("Visit Us")}
+            {t("Visit Us in Thankamony, Idukki")}
           </motion.h2>
           <motion.p
             className="section-subtitle mt-4 text-on-surface-variant"

@@ -8,6 +8,7 @@ import { ExperiencesSection } from "@/components/sections";
 import { LocationSection } from "@/components/sections";
 import { ResortShowcaseSection } from "@/components/sections";
 import { TestimonialsSection } from "@/components/sections";
+import { FaqSection } from "@/components/sections";
 import { ResortStructuredData } from "@/components/ResortStructuredData";
 import { notFound } from "next/navigation";
 import { localeFromSegments } from "@/i18n/routing";
@@ -34,6 +35,7 @@ export default async function Home({ params }: { params: Promise<{ locale?: stri
         <ExperiencesSection />
         <TestimonialsSection />
         <LocationSection />
+        <FaqSection locale={locale} />
       </main>
       <Footer />
     </>

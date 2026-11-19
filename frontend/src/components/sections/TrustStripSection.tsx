@@ -123,7 +123,7 @@ export function TrustStripSection() {
             variants={itemVariants}
             href={`tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}`}
             className="flex items-center gap-3 bg-deep-forest text-warm-ivory py-3 px-5 rounded-luxury hover:bg-twilight-navy transition-colors duration-300 group"
-            aria-label={t("Call {name} for reservations", { name: resortDetails.contactName })}
+            aria-label={t("Call {name} for reservations at {phone}", { name: resortDetails.contactName, phone: reservationDetails.phone })}
           >
             <div className="w-8 h-8 rounded-full bg-antique-gold/20 flex items-center justify-center flex-shrink-0 group-hover:bg-antique-gold/30 transition-colors duration-300">
               <Phone className="w-4 h-4 text-amber-glow" />
