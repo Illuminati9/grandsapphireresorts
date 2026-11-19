@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { resortDetails } from "@/data/reservations";
 
 export function Footer() {
   return (
@@ -14,8 +15,8 @@ export function Footer() {
           </Link>
           <p className="text-on-primary-container text-sm">Idukki, Kerala, India</p>
           <div className="mt-4 text-on-primary-container text-sm">
-            <p>Check-in: 2:00 PM</p>
-            <p>Check-out: 11:00 AM</p>
+            <p>Check-in: {resortDetails.checkIn}</p>
+            <p>Check-out: {resortDetails.checkOut}</p>
           </div>
         </div>
 
@@ -37,7 +38,7 @@ export function Footer() {
 
           <nav aria-label="Contact links" className="flex flex-col gap-4">
             <Link
-              href="#"
+              href="#location"
               className="text-on-primary-container hover:text-secondary-fixed transition-colors opacity-80 hover:opacity-100"
             >
               Contact Us

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import { reservationDetails, resortDetails } from "@/data/reservations";
 import {
   Headphones,
   Shield,
@@ -113,20 +114,20 @@ export function TrustStripSection() {
             );
           })}
 
-          <motion.a
+          {reservationDetails.phone && <motion.a
             variants={itemVariants}
-            href="tel:+911234567890"
+            href={`tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}`}
             className="flex items-center gap-3 bg-deep-forest text-warm-ivory py-3 px-5 rounded-luxury hover:bg-twilight-navy transition-colors duration-300 group"
-            aria-label="Call us"
+            aria-label={`Call ${resortDetails.contactName} for reservations`}
           >
             <div className="w-8 h-8 rounded-full bg-antique-gold/20 flex items-center justify-center flex-shrink-0 group-hover:bg-antique-gold/30 transition-colors duration-300">
               <Phone className="w-4 h-4 text-amber-glow" />
             </div>
             <div>
-              <p className="text-xs text-warm-ivory/70 font-label">Call us now</p>
-              <p className="text-sm font-semibold text-warm-ivory">+91 123 456 7890</p>
+              <p className="text-xs text-warm-ivory/70 font-label">Call {resortDetails.contactName}</p>
+              <p className="text-sm font-semibold text-warm-ivory">{reservationDetails.phone}</p>
             </div>
-          </motion.a>
+          </motion.a>}
         </motion.div>
       </div>
     </section>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Menu, X, Globe } from "lucide-react";
+import { useLenis } from "lenis/react";
 import { BookingButton } from "@/components/ui";
 
 const navLinks = [
@@ -18,24 +18,71 @@ const languages = [
   { code: "ML", name: "മലയാളം" },
 ];
 
+function containMenuFocus(event: KeyboardEvent<HTMLDialogElement>) {
+  if (event.key !== "Tab") return;
+
+  const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled]), select:not([disabled])',
+  )).filter((element) => element.getClientRects().length > 0);
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last?.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first?.focus();
+  }
+}
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const menuRef = useRef<HTMLDialogElement>(null);
+  const lenis = useLenis();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
+    const menu = menuRef.current;
+    if (!menu) return;
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+    if (isMobileMenuOpen && !menu.open) menu.showModal();
+    if (!isMobileMenuOpen && menu.open) menu.close();
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const wasStopped = lenis?.isStopped;
+    document.body.style.overflow = "hidden";
+    lenis?.stop();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (!wasStopped) lenis?.start();
+    };
+  }, [isMobileMenuOpen, lenis]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setIsMobileMenuOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <>
@@ -51,7 +98,7 @@ export function Navbar() {
         <nav className="flex justify-between items-center gap-sm px-md sm:px-lg max-w-content mx-auto" aria-label="Main navigation">
           <Link
             href="/"
-            className={`font-brand text-xl sm:text-2xl md:text-3xl font-normal tracking-normal leading-tight md:leading-none transition-colors brand-logo ${
+            className={`font-brand text-xl sm:text-2xl xl:text-3xl xl:shrink-0 font-normal tracking-normal leading-tight xl:leading-none transition-colors brand-logo ${
               isScrolled ? "text-deep-forest" : "text-warm-ivory"
             }`}
             aria-label="Grand Sapphire Resorts - Home"
@@ -59,7 +106,7 @@ export function Navbar() {
             Grand Sapphire Resorts
           </Link>
 
-          <div className="hidden md:flex items-center gap-md">
+          <div className="hidden xl:flex items-center gap-md">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -92,8 +139,9 @@ export function Navbar() {
           </div>
 
           <button
-            onClick={toggleMobileMenu}
-            className={`md:hidden -mr-2 p-2 transition-colors ${
+            type="button"
+            onClick={() => setIsMobileMenuOpen(true)}
+            className={`xl:hidden -mr-2 p-2 transition-colors ${
               isScrolled ? "text-deep-forest" : "text-warm-ivory"
             }`}
             aria-expanded={isMobileMenuOpen}
@@ -105,31 +153,31 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Outside <header>: the header's backdrop-blur makes it the containing
-          block for fixed children, which squashed this overlay into the bar. */}
-        <div
+      {/* Native modal keeps background content inert and restores trigger focus. */}
+        <dialog
+          ref={menuRef}
           id="mobile-menu"
-          className={`md:hidden fixed inset-0 bg-warm-ivory z-50 flex flex-col items-center justify-center gap-8 transition-opacity duration-300 ${
-            isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
-          role="dialog"
-          aria-modal="true"
+          className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-warm-ivory p-6 pt-20 text-deep-forest open:flex flex-col items-center overflow-y-auto"
           aria-label="Mobile menu"
+          onClose={closeMobileMenu}
+          onKeyDown={containMenuFocus}
+          data-lenis-prevent
         >
           <button
-            onClick={toggleMobileMenu}
-            className="absolute top-6 right-6 p-2 text-deep-forest"
+            type="button"
+            onClick={closeMobileMenu}
+            className="absolute top-6 right-6 min-h-12 min-w-12 p-2 text-deep-forest focus-ring"
             aria-label="Close menu"
           >
             <X className="w-6 h-6" aria-hidden="true" />
           </button>
 
-          <nav className="flex flex-col items-center gap-6">
+          <nav className="my-auto flex shrink-0 flex-col items-center gap-6" aria-label="Mobile navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={toggleMobileMenu}
+                onClick={closeMobileMenu}
                 className="font-headline text-2xl text-deep-forest hover:text-antique-gold transition-colors"
               >
                 {link.label}
@@ -151,12 +199,12 @@ export function Navbar() {
                 </select>
               </div>
 
-              <BookingButton variant="booking" className="w-full" onClick={toggleMobileMenu}>
+              <BookingButton variant="booking" className="w-full" onClick={closeMobileMenu}>
                 Book Now
               </BookingButton>
             </div>
           </nav>
-        </div>
+        </dialog>
 
       <div className="h-20" aria-hidden="true" />
     </>

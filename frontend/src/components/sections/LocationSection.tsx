@@ -1,16 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { reservationDetails, resortDetails } from "@/data/reservations";
 
 export function LocationSection() {
-  const locationInfo = {
-    address: "Grand Sapphire Resorts, Idukki, Kerala, India",
-    checkIn: "2:00 PM",
-    checkOut: "11:00 AM",
-    phone: "+91 123 456 7890",
-    email: "reservations@grandsapphireresorts.com",
-  };
-
   return (
     <section id="location" className="mx-auto max-w-content px-lg py-16 lg:py-20 location-section" aria-labelledby="location-title">
       <motion.div
@@ -43,12 +36,12 @@ export function LocationSection() {
 
           <div className="mt-10 space-y-5">
             {[
-              { icon: "location_on", label: "Address", value: locationInfo.address },
-              { icon: "login", label: "Check-in", value: locationInfo.checkIn },
-              { icon: "logout", label: "Check-out", value: locationInfo.checkOut },
-              { icon: "call", label: "Phone", value: locationInfo.phone, href: `tel:${locationInfo.phone}` },
-              { icon: "email", label: "Email", value: locationInfo.email, href: `mailto:${locationInfo.email}` },
-            ].map((item, index) => (
+              { icon: "location_on", label: "Address", value: resortDetails.address },
+              { icon: "login", label: "Check-in", value: resortDetails.checkIn },
+              { icon: "logout", label: "Check-out", value: resortDetails.checkOut },
+              { icon: "call", label: `Reservations (${resortDetails.contactName})`, value: reservationDetails.phone, href: `tel:${reservationDetails.phone.replace(/[^\d+]/g, "")}` },
+              { icon: "email", label: "Email", value: reservationDetails.email, href: `mailto:${reservationDetails.email}` },
+            ].filter((item) => item.value).map((item, index) => (
               <motion.div
                 key={item.label}
                 className="flex items-start gap-4 label-caps"
@@ -73,15 +66,18 @@ export function LocationSection() {
               </motion.div>
             ))}
           </div>
+          {!reservationDetails.bookingUrl && !reservationDetails.phone && !reservationDetails.email && (
+            <p className="mt-8 text-on-surface-variant">Online reservations are currently unavailable.</p>
+          )}
         </div>
 
         <div className="relative lg:self-stretch">
           {/* Fixed height below lg: aspect-video + min-height made the box wider
               than a phone screen and pushed the whole page sideways. */}
           <div className="h-[300px] w-full overflow-hidden rounded-hero bg-surface-container-highest shadow-hero lg:h-full lg:min-h-[360px]">
-            <iframe
+            {reservationDetails.mapEmbedUrl ? <iframe
               title="Grand Sapphire Resorts Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3926.123456789!2d76.9838!3d9.8450!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080b5f3e5e5e5f%3A0x5e5e5e5e5e5e5e5e!2sGrand%20Sapphire%20Resorts!5e0!3m2!1sen!2sin!4v1234567890"
+              src={reservationDetails.mapEmbedUrl}
               style={{ border: 0 }}
               width="100%"
               height="100%"
@@ -89,8 +85,18 @@ export function LocationSection() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full h-full"
-            />
+            /> : (
+              <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center text-deep-forest">
+                <span className="material-symbols-outlined text-4xl text-antique-gold" aria-hidden="true">location_on</span>
+                <p>Idukki, Kerala, India</p>
+              </div>
+            )}
           </div>
+          {reservationDetails.mapsUrl && (
+            <a href={reservationDetails.mapsUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex text-deep-forest underline underline-offset-4 hover:text-antique-gold focus-ring">
+              Get directions on Google Maps
+            </a>
+          )}
         </div>
       </motion.div>
     </section>
